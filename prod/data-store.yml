@@ -1,0 +1,7 @@
+# my_blob_datastore.yml
+$schema: https://azuremlschemas.azureedge.net/latest/azureBlob.schema.json
+name: mlopsdemoprodcointainer # add name of your datastore here
+type: azure_blob
+description: Prod container # add a description of your datastore here
+account_name: developmentjbdemo # add storage account name here
+container_name: mlopsdemoprod # add storage container name here

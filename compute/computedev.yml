@@ -1,0 +1,11 @@
+$schema: https://azuremlschemas.azureedge.net/latest/amlCompute.schema.json 
+name: mlopsdemo-cluster-dev
+type: amlcompute
+size: STANDARD_DS3_v2
+min_instances: 0
+max_instances: 3
+idle_time_before_scale_down: 120
+identity:
+  type: user_assigned
+  user_assigned_identities: 
+    - resource_id: "/subscriptions/6fab1661-47ae-49ea-ac8d-754881112b55/resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mlopsdemostgacc"

@@ -1,0 +1,16 @@
+$schema: https://azuremlschemas.azureedge.net/latest/batchDeployment.schema.json
+name: batch-dp-mlopsdemo-test
+endpoint_name: taxi-fare-batch-mlopsdemo-test
+model: azureml:taxi-test-model-mlops-demo@latest
+compute: azureml:mlopsdemo-cluster-test
+resources:
+  instance_count: 1
+max_concurrency_per_instance: 2
+mini_batch_size: 10
+output_action: append_row
+output_file_name: predictions.csv
+retry_settings:
+  max_retries: 3
+  timeout: 30
+error_threshold: -1
+logging_level: info

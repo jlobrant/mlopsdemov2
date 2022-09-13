@@ -1,0 +1,12 @@
+$schema: https://azuremlschemas.azureedge.net/latest/data.schema.json
+
+# Supported paths include:
+# local: ./<path>/<file>
+# blob:  https://<account_name>.blob.core.windows.net/<container_name>/<path>/<file>
+# ADLS gen2: abfss://<file_system>@<account_name>.dfs.core.windows.net/<path>/<file>
+# Datastore: azureml://datastores/<data_store_name>/paths/<path>/<file>
+
+type: uri_file
+name: taxi-test-data-mlops-demo
+description: Data asset for testing
+path: azureml://datastores/mlopsdemotestcointainer/paths/taxibatch/taxi-batch.csv

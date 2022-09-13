@@ -1,0 +1,16 @@
+artifact_path: taxi-model-mlops-demo
+flavors:
+  python_function:
+    env: conda.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    python_version: 3.7.5
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 0.24.1
+mlflow_version: 1.28.0
+model_uuid: dcf3709af8fa42fea93a92e64349f956
+run_id: 5a1db505-6778-4e85-b238-01d54120fbe1
+utc_time_created: '2022-09-13 15:55:05.951736'
