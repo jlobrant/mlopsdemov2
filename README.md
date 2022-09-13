@@ -124,3 +124,32 @@ az ml batch-deployment create --file ./prod/batch-deployment-prod.yml --resource
 ## Execute Batch Job
 
 az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-name batch-dp-mlopsdemo-prod --input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03 --output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
+
+# Demo Outcomes
+
+## Dev Workspace
+
+![image](https://user-images.githubusercontent.com/31459994/189990789-c095bd4a-4a98-42cf-a2c1-85ed2fab1bdb.png)
+
+![image](https://user-images.githubusercontent.com/31459994/189990983-93d28187-3b56-49b6-996e-f7379574b29e.png)
+
+## Test Workspace
+
+![image](https://user-images.githubusercontent.com/31459994/189991064-b49fc8c0-426e-47e3-9b4f-dfcb2bd368b6.png)
+
+![image](https://user-images.githubusercontent.com/31459994/189991354-0ba0ba7f-143a-4c74-bdd7-9012af47a063.png)
+
+![image](https://user-images.githubusercontent.com/31459994/189991391-595b1af4-b468-40e9-8142-84f7d9459508.png)
+
+![image](https://user-images.githubusercontent.com/31459994/189991441-7841d995-7bc5-45e4-86c8-3db743b5e8b2.png)
+
+## Prod Workspace
+
+![image](https://user-images.githubusercontent.com/31459994/189991518-146b149c-6822-4710-9c3d-7818752d9bb7.png)
+
+![image](https://user-images.githubusercontent.com/31459994/189991642-ba508cfc-3fa5-4c86-9ca7-8d9a1b9cb150.png)
+
+![image](https://user-images.githubusercontent.com/31459994/189991684-ac0a69e2-8c83-4296-b2ad-dbc8ab08bf4d.png)
+
+![image](https://user-images.githubusercontent.com/31459994/189991726-34e220fa-7040-4687-8603-23f58c4523ba.png)
+
