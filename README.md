@@ -9,7 +9,9 @@ Note: Run all scripts in the root folder
 ## Create 3 AML Workspaces to use in the demo
 
 01 - Dev Workspace
+
 02 - Test Workspace
+
 03 - Prod Workspace
 
 ## Create a Storage Account and Containers
