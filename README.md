@@ -4,6 +4,8 @@
 
 # Setting up new MLOPS
 
+Note: Run all scripts in the root folder
+
 ## Create 3 AML Workspaces to use in the demo
 
 01 - Dev Workspace
