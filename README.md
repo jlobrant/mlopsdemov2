@@ -29,13 +29,18 @@ Example: /subscriptions/.../resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Mi
 
 ## Create Compute
 
-Dev: az ml compute create -f ./compute/computedev.yml --workspace-name mlopsdemojb01 --resource-group rg-ml-mlopsworkspaces-jb
+Dev: 
+``` az ml compute create -f ./compute/computedev.yml --workspace-name mlopsdemojb01 --resource-group rg-ml-mlopsworkspaces-jb ```
 Test: az ml compute create -f ./compute/computetest.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
 Prod: az ml compute create -f ./compute/computeprod.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
 
 Grant access on the Storage Account you will use for the demo:
 
 ![image](https://user-images.githubusercontent.com/31459994/189962665-1ca157b1-fc19-4c5f-a6c1-1658c5750e95.png)
+
+Also grant access to the AML Workspaces identities:
+
+![image](https://user-images.githubusercontent.com/31459994/190242807-9692a5d5-2246-4fee-83ca-eaab33dcba45.png)
 
 
 ## Create the containers in the Storage Account
