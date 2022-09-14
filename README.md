@@ -104,13 +104,15 @@ az ml data create -f ./test/file-data-asset.yml --workspace-name mlopsdemojb02 -
 ## Download model from Dev Workspace
 
 ```
-az ml model download --name taxi-model-mlops-demo --version 1 --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01 --download-path ./model
+az ml model download --name taxi-model-mlops-demo --version 1 --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
+--download-path ./model
 ```
 
 ## Register model on Test Workspace
 
 ```
-az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
+az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo
+--resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
 ```
 
 ## Register Batch Endpoint
@@ -122,13 +124,16 @@ az ml batch-endpoint create --file ./test/batch-endpoint-test.yml --resource-gro
 ## Register Batch Deployment
 
 ```
-az ml batch-deployment create --file ./test/batch-deployment-test.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
+az ml batch-deployment create --file ./test/batch-deployment-test.yml --resource-group rg-ml-mlopsworkspaces-jb 
+--workspace-name mlopsdemojb02
 ```
 
 ## Execute Batch Job
 
 ```
-az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-test --deployment-name batch-dp-mlopsdemo-test --input-type uri_file --input azureml://datastores/mlopsdemotestcointainer/paths/taxibatch/taxi-batch.csv --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02 --output-path azureml://datastores/mlopsdemotestcointainer/paths/taxioutput
+az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-test --deployment-name batch-dp-mlopsdemo-test 
+--input-type uri_file --input azureml://datastores/mlopsdemotestcointainer/paths/taxibatch/taxi-batch.csv --resource-group rg-ml-mlopsworkspaces-jb 
+--workspace-name mlopsdemojb02 --output-path azureml://datastores/mlopsdemotestcointainer/paths/taxioutput
 ```
 
 # Prod Steps - Workspace 03 (Prod)
@@ -160,25 +165,30 @@ Already done in Test step
 ## Register Model
 
 ```
-az ml model create --name taxi-prod-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
+az ml model create --name taxi-prod-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo 
+--resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
 ```
 
 ## Register Batch Endpoint
 
 ```
-az ml batch-endpoint create --file ./prod/batch-endpoint-prod.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
+az ml batch-endpoint create --file ./prod/batch-endpoint-prod.yml --resource-group rg-ml-mlopsworkspaces-jb 
+--workspace-name mlopsdemojb03
 ```
 
 ## Register Batch Deployment
 
 ```
-az ml batch-deployment create --file ./prod/batch-deployment-prod.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
+az ml batch-deployment create --file ./prod/batch-deployment-prod.yml --resource-group rg-ml-mlopsworkspaces-jb 
+--workspace-name mlopsdemojb03
 ```
 
 ## Execute Batch Job
 
 ```
-az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-name batch-dp-mlopsdemo-prod --input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03 --output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
+az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-name batch-dp-mlopsdemo-prod 
+--input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv 
+--resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03 --output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
 ```
 
 # Demo Outcomes
