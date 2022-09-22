@@ -31,7 +31,7 @@ Example: /subscriptions/.../resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Mi
 
 Dev: 
 
-```
+```Shell
 az ml compute create -f ./compute/computedev.yml --workspace-name mlopsdemojb01 
 --resource-group rg-ml-mlopsworkspaces-jb
 ```
