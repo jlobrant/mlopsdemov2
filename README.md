@@ -227,7 +227,7 @@ With the advance of AI and machine learning, companies start to use complex mach
 
 In these machine learning systems, we see many problems that consume lots of energy of machine learning engineers and data scientists, in particular duplicated feature engineering, online-offline skew, and feature serving with low latency.
 
-![image](https://user-images.githubusercontent.com/31459994/191637723-0215c996-16a9-4019-8e67-28225f8d973b.png)
+![image](https://user-images.githubusercontent.com/31459994/191637867-1b4831d5-5a7e-40d6-bc23-5cc214ef8242.png)
 
 Reference: [Feathr: LinkedIn’s feature store is now available on Azure](https://azure.microsoft.com/en-us/blog/feathr-linkedin-s-feature-store-is-now-available-on-azure/)
 
