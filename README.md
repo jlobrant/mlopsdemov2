@@ -216,5 +216,8 @@ az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-n
 
 ![image](https://user-images.githubusercontent.com/31459994/191634386-22994cae-8069-48a1-a64e-973bc15e1514.png)
 
-## Resource Provisioning
+## Feathr
+
+![image](https://user-images.githubusercontent.com/31459994/191635949-703d64b8-ca26-40bd-9cc3-a3bc187ac38d.png)
+
 
