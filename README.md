@@ -215,6 +215,13 @@ az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-n
 
 ## AML Registries
 
+### Registries objectives:
+
+- Registry is a collection of AzureML Assets that can be used by one or more Workspaces.
+- Registries facilitate sharing of assets among teams working across multiple Workspaces in an organization. Registries, by virtue of sharing assets, enable MLOps flow of assets across dev -> test -> prod environments.
+- Registries can make Workspaces more project centric by decoupling iterative assets in Workspaces and final/prod ready assets in Registries.
+- Assets in Registries can be used by Workspaces in any region (specified while creating the a Registry), with the service transparently replicating necessary resources (code snapshots, docker images) in the background.
+
 ![image](https://user-images.githubusercontent.com/31459994/191634386-22994cae-8069-48a1-a64e-973bc15e1514.png)
 
 ## Feathr Feature Store
