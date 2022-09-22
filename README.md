@@ -209,8 +209,9 @@ az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-n
 
 ![image](https://user-images.githubusercontent.com/31459994/189991726-34e220fa-7040-4687-8603-23f58c4523ba.png)
 
+---------------------------------------------------------------------------------------------------------------
 
-# Comming Soon
+# Coming Soon
 
 ## AML Registries
 
