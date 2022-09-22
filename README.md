@@ -33,21 +33,21 @@ Dev:
 
 ```powershell
 az ml compute create -f ./compute/computedev.yml --workspace-name mlopsdemojb01 
---resource-group rg-ml-mlopsworkspaces-jb
+| --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 Test: 
 
 ```
 az ml compute create -f ./compute/computetest.yml --workspace-name mlopsdemojb02 
---resource-group rg-ml-mlopsworkspaces-jb
+| --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 Prod: 
 
 ```
 az ml compute create -f ./compute/computeprod.yml --workspace-name mlopsdemojb03 
---resource-group rg-ml-mlopsworkspaces-jb
+| --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 Grant access on the Storage Account you will use for the demo:
@@ -74,14 +74,14 @@ Use the following structure in test and prod containers
 
 ```
 az ml environment create --file ./dev/train-env.yml --workspace-name mlopsdemojb01 
---resource-group rg-ml-mlopsworkspaces-jb
+| --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 ## Pipeline run
 
 ```
 az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb 
---workspace-name mlopsdemojb01
+| --workspace-name mlopsdemojb01
 ```
 
 # Test Steps - Workspace 02 (Test)
@@ -90,7 +90,7 @@ az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspace
 
 ```
 az ml environment create --file ./test/test-env.yml --workspace-name mlopsdemojb02 
---resource-group rg-ml-mlopsworkspaces-jb
+| --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 ## Create datastore and data asset
@@ -99,22 +99,22 @@ Datastore
 
 ```
 az ml datastore create --file ./test/data-store.yml --workspace-name mlopsdemojb02 
---resource-group rg-ml-mlopsworkspaces-jb
+| --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 Data Asset
 
 ```
 az ml data create -f ./test/file-data-asset.yml --workspace-name mlopsdemojb02 
---resource-group rg-ml-mlopsworkspaces-jb
+| --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 ## Download model from Dev Workspace
 
 ```
 az ml model download --name taxi-model-mlops-demo --version 1 
---resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
---download-path ./model
+| --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
+| --download-path ./model
 ```
 
 ## Register model on Test Workspace
