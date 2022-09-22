@@ -1,4 +1,4 @@
-# Deploying Featrh
+# Deploying Feathr
 
 Please take a look at the following link before proceding to get the latest updates about the deployment procedure
 
