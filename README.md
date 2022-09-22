@@ -31,23 +31,20 @@ Example: /subscriptions/.../resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Mi
 
 Dev: 
 
-```
-az ml compute create -f ./compute/computedev.yml --workspace-name mlopsdemojb01 
---resource-group rg-ml-mlopsworkspaces-jb
+```powershell
+az ml compute create -f ./compute/computedev.yml --workspace-name mlopsdemojb01 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 Test: 
 
-```
-az ml compute create -f ./compute/computetest.yml --workspace-name mlopsdemojb02 
---resource-group rg-ml-mlopsworkspaces-jb
+```powershell
+az ml compute create -f ./compute/computetest.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 Prod: 
 
-```
-az ml compute create -f ./compute/computeprod.yml --workspace-name mlopsdemojb03 
---resource-group rg-ml-mlopsworkspaces-jb
+```powershell
+az ml compute create -f ./compute/computeprod.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 Grant access on the Storage Account you will use for the demo:
@@ -72,105 +69,88 @@ Use the following structure in test and prod containers
 
 ## Create AML Environment
 
-```
-az ml environment create --file ./dev/train-env.yml --workspace-name mlopsdemojb01 
---resource-group rg-ml-mlopsworkspaces-jb
+```powershell
+az ml environment create --file ./dev/train-env.yml --workspace-name mlopsdemojb01 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 ## Pipeline run
 
-```
-az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb 
---workspace-name mlopsdemojb01
+```powershell
+az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
 ```
 
 # Test Steps - Workspace 02 (Test)
 
 ## Create AML Enviroment
 
-```
-az ml environment create --file ./test/test-env.yml --workspace-name mlopsdemojb02 
---resource-group rg-ml-mlopsworkspaces-jb
+```powershell
+az ml environment create --file ./test/test-env.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 ## Create datastore and data asset
 
 Datastore
 
-```
-az ml datastore create --file ./test/data-store.yml --workspace-name mlopsdemojb02 
---resource-group rg-ml-mlopsworkspaces-jb
+```powershell
+az ml datastore create --file ./test/data-store.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 Data Asset
 
-```
-az ml data create -f ./test/file-data-asset.yml --workspace-name mlopsdemojb02 
---resource-group rg-ml-mlopsworkspaces-jb
+```powershell
+az ml data create -f ./test/file-data-asset.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 ## Download model from Dev Workspace
 
-```
-az ml model download --name taxi-model-mlops-demo --version 1 
---resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
---download-path ./model
+```powershell
+az ml model download --name taxi-model-mlops-demo --version 1 --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01 --download-path ./model
 ```
 
 ## Register model on Test Workspace
 
-```
-az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo
---resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
+```powershell
+az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
 ```
 
 ## Register Batch Endpoint
 
-```
-az ml batch-endpoint create --file ./test/batch-endpoint-test.yml 
---resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
+```powershell
+az ml batch-endpoint create --file ./test/batch-endpoint-test.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
 ```
 
 ## Register Batch Deployment
 
-```
-az ml batch-deployment create --file ./test/batch-deployment-test.yml 
---resource-group rg-ml-mlopsworkspaces-jb 
---workspace-name mlopsdemojb02
+```powershell
+az ml batch-deployment create --file ./test/batch-deployment-test.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
 ```
 
 ## Execute Batch Job
 
-```
-az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-test --deployment-name batch-dp-mlopsdemo-test 
---input-type uri_file --input azureml://datastores/mlopsdemotestcointainer/paths/taxibatch/taxi-batch.csv 
---resource-group rg-ml-mlopsworkspaces-jb 
---workspace-name mlopsdemojb02 --output-path azureml://datastores/mlopsdemotestcointainer/paths/taxioutput
+```powershell
+az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-test --deployment-name batch-dp-mlopsdemo-test  --input-type uri_file --input azureml://datastores/mlopsdemotestcointainer/paths/taxibatch/taxi-batch.csv  --resource-group rg-ml-mlopsworkspaces-jb  --workspace-name mlopsdemojb02 --output-path azureml://datastores/mlopsdemotestcointainer/paths/taxioutput
 ```
 
 # Prod Steps - Workspace 03 (Prod)
 
 ## Create Environment
 
-```
-az ml environment create --file ./prod/prod-env.yml --workspace-name mlopsdemojb03 
---resource-group rg-ml-mlopsworkspaces-jb
+```powershell
+az ml environment create --file ./prod/prod-env.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 ## Create datastore and data asset
 
 Datastore
 
-```
-az ml datastore create --file ./prod/data-store.yml --workspace-name mlopsdemojb03 
---resource-group rg-ml-mlopsworkspaces-jb
+```powershell
+az ml datastore create --file ./prod/data-store.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 Data Asset
 
-```
-az ml data create -f ./prod/file-data-asset.yml --workspace-name mlopsdemojb03 
---resource-group rg-ml-mlopsworkspaces-jb
+```powershell
+az ml data create -f ./prod/file-data-asset.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
 ## Download model from Dev Workspace
@@ -179,36 +159,26 @@ Already done in Test step
 
 ## Register Model
 
-```
-az ml model create --name taxi-prod-model-mlops-demo --version 1 
---path ./model/taxi-model-mlops-demo 
---resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
+```powershell
+az ml model create --name taxi-prod-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
 ```
 
 ## Register Batch Endpoint
 
-```
-az ml batch-endpoint create --file ./prod/batch-endpoint-prod.yml 
---resource-group rg-ml-mlopsworkspaces-jb 
---workspace-name mlopsdemojb03
+```powershell
+az ml batch-endpoint create --file ./prod/batch-endpoint-prod.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
 ```
 
 ## Register Batch Deployment
 
-```
-az ml batch-deployment create --file ./prod/batch-deployment-prod.yml 
---resource-group rg-ml-mlopsworkspaces-jb 
---workspace-name mlopsdemojb03
+```powershell
+az ml batch-deployment create --file ./prod/batch-deployment-prod.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
 ```
 
 ## Execute Batch Job
 
-```
-az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod 
---deployment-name batch-dp-mlopsdemo-prod 
---input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv 
---resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03 
---output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
+```powershell
+az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-name batch-dp-mlopsdemo-prod --input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03 --output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
 ```
 
 # Demo Outcomes
@@ -238,4 +208,17 @@ az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod
 ![image](https://user-images.githubusercontent.com/31459994/189991684-ac0a69e2-8c83-4296-b2ad-dbc8ab08bf4d.png)
 
 ![image](https://user-images.githubusercontent.com/31459994/189991726-34e220fa-7040-4687-8603-23f58c4523ba.png)
+
+---------------------------------------------------------------------------------------------------------------
+
+# Coming Soon
+
+## AML Registries
+
+![image](https://user-images.githubusercontent.com/31459994/191634386-22994cae-8069-48a1-a64e-973bc15e1514.png)
+
+## Feathr
+
+![image](https://user-images.githubusercontent.com/31459994/191635949-703d64b8-ca26-40bd-9cc3-a3bc187ac38d.png)
+
 
