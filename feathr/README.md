@@ -10,4 +10,6 @@ Execute the file 1 and 2
 
 Use the Deploy to Azure button below
 
-![image](https://user-images.githubusercontent.com/31459994/191636918-9f04526c-a2cc-4ae5-9561-fe522f1aa37d.png)
+[![image](https://user-images.githubusercontent.com/31459994/191636918-9f04526c-a2cc-4ae5-9561-fe522f1aa37d.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffeathr-ai%2Ffeathr%2Fmain%2Fdocs%2Fhow-to-guides%2Fazure_resource_provision.json)
+
+Execute the file 3
