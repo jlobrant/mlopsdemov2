@@ -37,7 +37,6 @@ jobs:
       with:
        azcliversion: 2.40.0
        inlineScript: |
-            az extension remove -n azure-cli-ml
             az extension add -n ml -y
             
 
