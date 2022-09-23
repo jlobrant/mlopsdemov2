@@ -35,9 +35,13 @@ jobs:
     - name: Execute ML Pipeline
       uses: azure/CLI@v1
       with:
-       azcliversion: 2.30.0
+       azcliversion: 2.40.0
        inlineScript: |
+            az extension remove -n azure-cli-ml
             az extension add -n ml -y
-            az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
+            
+
+
+#            az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
 
       
