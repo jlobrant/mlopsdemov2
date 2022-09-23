@@ -2,7 +2,9 @@
 
 ![image](https://user-images.githubusercontent.com/31459994/189961497-b7516d79-594c-4f92-9234-0770f9586860.png)
 
-## Setting up new MLOPS - Step by Step guide - Manual Execution (Learning purpose)
+# Step by Step guide - Manual Execution (Learning purpose)
+
+## Setting up new MLOPS
 
 Note: Run all scripts in the root folder
 
@@ -14,13 +16,13 @@ Note: Run all scripts in the root folder
 
 03 - Prod Workspace
 
-## Create a Storage Account and Containers
+### Create a Storage Account and Containers
 
 Create a storage account that you will use in the demo. Example: developmentjbdemo
 
 Also creates mlopsdemodev, mlopsdemotest and mlopsdemoprod containers
 
-## Create a User Managed Identity
+### Create a User Managed Identity
 
 ```powershell
 az identity create  -n mlopsdemostgacc --query id -o tsv -g rg-ml-mlopsworkspaces-jb
@@ -30,7 +32,7 @@ Get the result and add the string in the create compute script yml file.
 Example:
 ./compute/computedev.yml --> /subscriptions/.../resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mlopsdemostgacc
 
-## Create Compute
+### Create Compute
 
 Dev: 
 
@@ -59,7 +61,7 @@ Also grant access to the AML Workspaces identities:
 ![image](https://user-images.githubusercontent.com/31459994/190242807-9692a5d5-2246-4fee-83ca-eaab33dcba45.png)
 
 
-## Create the containers in the Storage Account
+### Create the containers in the Storage Account
 
 ![image](https://user-images.githubusercontent.com/31459994/189990051-91c17663-d9ad-4fc5-bdd3-ecbf2426b735.png)
 
@@ -71,29 +73,29 @@ Use the following structure in test and prod containers
 Upload the file taxi-batch.csv to test and prod containers. The file is in the /data directory
 
 
-# Dev Steps - Workspace 01 (Dev)
+## Dev Steps - Workspace 01 (Dev)
 
-## Create AML Environment
+### Create AML Environment
 
 ```powershell
 az ml environment create --file ./dev/train-env.yml --workspace-name mlopsdemojb01 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
-## Pipeline run
+### Pipeline run
 
 ```powershell
 az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
 ```
 
-# Test Steps - Workspace 02 (Test)
+## Test Steps - Workspace 02 (Test)
 
-## Create AML Enviroment
+### Create AML Enviroment
 
 ```powershell
 az ml environment create --file ./test/test-env.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
-## Create datastore and data asset
+### Create datastore and data asset
 
 Datastore
 
@@ -107,45 +109,45 @@ Data Asset
 az ml data create -f ./test/file-data-asset.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
-## Download model from Dev Workspace
+### Download model from Dev Workspace
 
 ```powershell
 az ml model download --name taxi-model-mlops-demo --version 1 --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01 --download-path ./model
 ```
 
-## Register model on Test Workspace
+### Register model on Test Workspace
 
 ```powershell
 az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
 ```
 
-## Register Batch Endpoint
+### Register Batch Endpoint
 
 ```powershell
 az ml batch-endpoint create --file ./test/batch-endpoint-test.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
 ```
 
-## Register Batch Deployment
+### Register Batch Deployment
 
 ```powershell
 az ml batch-deployment create --file ./test/batch-deployment-test.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
 ```
 
-## Execute Batch Job
+### Execute Batch Job
 
 ```powershell
 az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-test --deployment-name batch-dp-mlopsdemo-test  --input-type uri_file --input azureml://datastores/mlopsdemotestcointainer/paths/taxibatch/taxi-batch.csv  --resource-group rg-ml-mlopsworkspaces-jb  --workspace-name mlopsdemojb02 --output-path azureml://datastores/mlopsdemotestcointainer/paths/taxioutput
 ```
 
-# Prod Steps - Workspace 03 (Prod)
+## Prod Steps - Workspace 03 (Prod)
 
-## Create Environment
+### Create Environment
 
 ```powershell
 az ml environment create --file ./prod/prod-env.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
-## Create datastore and data asset
+### Create datastore and data asset
 
 Datastore
 
@@ -159,43 +161,43 @@ Data Asset
 az ml data create -f ./prod/file-data-asset.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
 ```
 
-## Download model from Dev Workspace
+### Download model from Dev Workspace
 
 Already done in Test step
 
-## Register Model
+### Register Model
 
 ```powershell
 az ml model create --name taxi-prod-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
 ```
 
-## Register Batch Endpoint
+### Register Batch Endpoint
 
 ```powershell
 az ml batch-endpoint create --file ./prod/batch-endpoint-prod.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
 ```
 
-## Register Batch Deployment
+### Register Batch Deployment
 
 ```powershell
 az ml batch-deployment create --file ./prod/batch-deployment-prod.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
 ```
 
-## Execute Batch Job
+### Execute Batch Job
 
 ```powershell
 az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-name batch-dp-mlopsdemo-prod --input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03 --output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
 ```
 
-# Demo Outcomes
+## Demo Outcomes
 
-## Dev Workspace
+### Dev Workspace
 
 ![image](https://user-images.githubusercontent.com/31459994/189990789-c095bd4a-4a98-42cf-a2c1-85ed2fab1bdb.png)
 
 ![image](https://user-images.githubusercontent.com/31459994/189990983-93d28187-3b56-49b6-996e-f7379574b29e.png)
 
-## Test Workspace
+### Test Workspace
 
 ![image](https://user-images.githubusercontent.com/31459994/189991064-b49fc8c0-426e-47e3-9b4f-dfcb2bd368b6.png)
 
@@ -205,7 +207,7 @@ az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-n
 
 ![image](https://user-images.githubusercontent.com/31459994/189991441-7841d995-7bc5-45e4-86c8-3db743b5e8b2.png)
 
-## Prod Workspace
+### Prod Workspace
 
 ![image](https://user-images.githubusercontent.com/31459994/189991518-146b149c-6822-4710-9c3d-7818752d9bb7.png)
 
@@ -218,6 +220,7 @@ az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-n
 ---------------------------------------------------------------------------------------------------------------
 
 # GitHub Actions
+
 
 ### ... Coming Soon
 
