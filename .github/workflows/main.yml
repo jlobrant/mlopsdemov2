@@ -20,27 +20,13 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         
-#    - name: Install AZ ML CLIv2 
-#      uses: azure/CLI@v1
-#      continue-on-error: true
-#      with:
-#       azcliversion: latest
-#       inlineScript: |
-#            az extension remove -n azure-cli-ml
-# az extension remove -n ml
-# az extension add -n ml -y
-# az extension update -n ml
+
+    - name: Setup Azure ML Cli
+      run: bash setup.sh
+      working-directory: scripts
 
             
     - name: Execute ML Pipeline
-      uses: azure/CLI@v1
-      with:
-       azcliversion: 2.40.0
-       inlineScript: |
-            az extension add -n ml -y
-            
-
-
-#            az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
+      run: az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
 
       
