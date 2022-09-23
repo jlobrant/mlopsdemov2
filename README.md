@@ -2,11 +2,11 @@
 
 ![image](https://user-images.githubusercontent.com/31459994/189961497-b7516d79-594c-4f92-9234-0770f9586860.png)
 
-# Setting up new MLOPS - Step by Step guide - Manual Execution (Learning purpose)
+## Setting up new MLOPS - Step by Step guide - Manual Execution (Learning purpose)
 
 Note: Run all scripts in the root folder
 
-## Create 3 AML Workspaces to use in the demo
+### Create 3 AML Workspaces to use in the demo
 
 01 - Dev Workspace
 
