@@ -77,6 +77,8 @@ az identity create  -n mlopsuidemo --query id -o tsv -g rg-demo-mlops
 
 Save the string and update the yml files in **/compute** folder
 
+![image](https://user-images.githubusercontent.com/31459994/192035873-4d3d75a2-cd6b-4444-99ab-5c3ad10a6896.png)
+
 
 Example:
 
@@ -93,19 +95,19 @@ user_assigned_identities:
 Dev: 
 
 ```powershell
-az ml compute create -f ./compute/computedev.yml --workspace-name mlopsdemojb01 --resource-group rg-ml-mlopsworkspaces-jb
+az ml compute create -f ./compute/computedev.yml --workspace-name ml-workspace-demo-s-01 --resource-group rg-demo-mlops
 ```
 
 Test: 
 
 ```powershell
-az ml compute create -f ./compute/computetest.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
+az ml compute create -f ./compute/computetest.yml --workspace-name ml-workspace-demo-s-02 --resource-group rg-demo-mlops
 ```
 
 Prod: 
 
 ```powershell
-az ml compute create -f ./compute/computeprod.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
+az ml compute create -f ./compute/computeprod.yml --workspace-name ml-workspace-demo-s-03 --resource-group rg-demo-mlops
 ```
 
 Grant access on the Storage Account you will use for the demo:
