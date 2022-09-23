@@ -1,0 +1,9 @@
+## Change the workspace name according to your needs
+$schema: https://azuremlschemas.azureedge.net/latest/workspace.schema.json
+name: ml-workspace-demo-s-03
+location: eastus2
+display_name: Test Workspace
+description: Workspace part of the MLOps demo
+hbi_workspace: false
+tags:
+  purpose: Demo
