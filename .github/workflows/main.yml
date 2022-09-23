@@ -20,16 +20,41 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         
-    - name: Install AZ ML CLIv2
+    - name: Install AZ ML CLIv2 Part1
       uses: azure/CLI@v1
       continue-on-error: true
       with:
        azcliversion: latest
        inlineScript: |
             az extension remove -n azure-cli-ml
-            az extension remove -n ml
-            az extension add -n ml -y
-            az extension update -n ml
+            
+    - name: Install AZ ML CLIv2 Part2
+      uses: azure/CLI@v1
+      continue-on-error: true
+      with:
+       azcliversion: latest
+       inlineScript: |
+            az extension remove -n ml            
+                          
+            
+    - name: Install AZ ML CLIv2 Part3
+      uses: azure/CLI@v1
+      continue-on-error: true
+      with:
+       azcliversion: latest
+       inlineScript: |
+            az extension add -n ml -y            
+ 
+                          
+            
+    - name: Install AZ ML CLIv2 Part4
+      uses: azure/CLI@v1
+      continue-on-error: true
+      with:
+       azcliversion: latest
+       inlineScript: |
+            az extension update -n ml           
+
             
     - name: Execute ML Pipeline
       uses: azure/CLI@v1
