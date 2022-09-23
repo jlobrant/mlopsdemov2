@@ -21,9 +21,9 @@ Example
 ![image](https://user-images.githubusercontent.com/31459994/192010305-3dc1bf34-68f1-468d-84c3-f98d2d267a20.png)
 
 
-### Create a Storage Account and Containers
+### Create a Storage Account
 
-Create a storage account that you will use in the demo. Example: developmentjbdemo
+Create a storage account that you will use in the demo. Example: **developmentjbdemo**
 
 ![image](https://user-images.githubusercontent.com/31459994/192010503-24815bf4-9453-4df8-a328-0310478d679d.png)
 
@@ -76,7 +76,7 @@ Use the following structure in test and prod containers
 ![image](https://user-images.githubusercontent.com/31459994/189990148-a45364ef-ec1d-41b6-8f2b-4c58b1ee4a61.png)
 
 
-Upload the file taxi-batch.csv to test and prod containers. The file is in the /data directory
+Upload the file **taxi-batch.csv** to test and prod containers under the **taxibatch** directory. The file is in the **/data** directory
 
 
 ## Dev Steps - Workspace 01 (Dev)
