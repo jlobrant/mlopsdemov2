@@ -22,6 +22,7 @@ jobs:
         
     - name: Install AZ ML CLIv2
       uses: azure/CLI@v1
+      continue-on-error: true
       with:
        azcliversion: latest
        inlineScript: |
