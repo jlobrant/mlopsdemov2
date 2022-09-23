@@ -21,16 +21,11 @@ Example
 ![image](https://user-images.githubusercontent.com/31459994/192010305-3dc1bf34-68f1-468d-84c3-f98d2d267a20.png)
 
 
-
 ### Create a Storage Account and Containers
 
 Create a storage account that you will use in the demo. Example: developmentjbdemo
 
 ![image](https://user-images.githubusercontent.com/31459994/192010503-24815bf4-9453-4df8-a328-0310478d679d.png)
-
-Also creates mlopsdemodev, mlopsdemotest and mlopsdemoprod containers
-
-![image](https://user-images.githubusercontent.com/31459994/192010592-b5c73907-0b63-40d5-ab50-602fa40ccaf3.png)
 
 
 ### Create a User Managed Identity
