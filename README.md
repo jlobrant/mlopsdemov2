@@ -68,6 +68,9 @@ Use the following structure in test and prod containers
 ![image](https://user-images.githubusercontent.com/31459994/189990148-a45364ef-ec1d-41b6-8f2b-4c58b1ee4a61.png)
 
 
+Upload the file taxi-batch.csv to test and prod containers. The file is in the /data directory
+
+
 # Dev Steps - Workspace 01 (Dev)
 
 ## Create AML Environment
