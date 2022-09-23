@@ -22,7 +22,9 @@ Also creates mlopsdemodev, mlopsdemotest and mlopsdemoprod containers
 
 ## Create a User Managed Identity
 
+```powershell
 az identity create  -n mlopsdemostgacc --query id -o tsv -g rg-ml-mlopsworkspaces-jb
+```
 
 Get the result and add the string in the create compute script.
 Example: /subscriptions/.../resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mlopsdemostgacc
