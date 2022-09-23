@@ -1,5 +1,9 @@
 on: push
 
+permissions:
+      id-token: write
+      contents: read
+
 jobs:
   deployment:
     runs-on: ubuntu-latest
