@@ -6,61 +6,128 @@
 
 ## Prerequisite - Setting up new MLOPS
 
-Note: Run all scripts in the root folder
+### Use Visual Studio Code to clone this repository:
+
+![image](https://user-images.githubusercontent.com/31459994/192029368-4faaf3e2-d160-4cbd-830a-c29ed9218624.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192029880-f2310bd5-cbab-452e-89b0-d6fdf6a281be.png)
+
+
+If you need any assistance to set this up, check the link below:
+
+[VSCode - Source Control](https://code.visualstudio.com/docs/sourcecontrol/overview)
+
+### Create the resource group you will use in this demo
+
+```powershell
+az group create -l eastus2 -n rg-demo-mlops
+```
 
 ### Create 3 AML Workspaces to use in the demo
 
-01 - Dev Workspace
+Before executing the az cli commands, please update the workspace names in yml files. The workspaces yml files are stored in the **/workspace** folder.
 
-02 - Test Workspace
+![image](https://user-images.githubusercontent.com/31459994/192031844-09031ce6-3c7f-489c-8418-99b7d02a9c71.png)
 
-03 - Prod Workspace
+
+01 - Create Dev Workspace
+
+```powershell
+az ml workspace create --file ./workspace/devworkspace.yml --resource-group rg-demo-mlops
+```
+
+02 - Create Test Workspace
+
+```powershell
+az ml workspace create --file ./workspace/testworkspace.yml --resource-group rg-demo-mlops
+```
+
+03 - Create Prod Workspace
+
+```powershell
+az ml workspace create --file ./workspace/prodworkspace.yml --resource-group rg-demo-mlops
+```
 
 Example
 
-![image](https://user-images.githubusercontent.com/31459994/192010305-3dc1bf34-68f1-468d-84c3-f98d2d267a20.png)
+![image](https://user-images.githubusercontent.com/31459994/192032047-b2f2fbe5-4f01-496e-b26d-435a505dcb55.png)
 
 
 ### Create a Storage Account
 
-Create a storage account that you will use in the demo. Example: **developmentjbdemo**
+Create the Storage Acc group
 
-![image](https://user-images.githubusercontent.com/31459994/192010503-24815bf4-9453-4df8-a328-0310478d679d.png)
+```powershell
+az group create -l eastus2 -n rg-demo-storage-mlops
+```
 
+Create a storage account 
+
+```powershell
+az storage account create --name stgaccmlops2demo --resource-group rg-demo-storage-mlops --location eastus2 --sku Standard_ZRS --kind StorageV2 --enable-hierarchical-namespace true
+```
+
+**Important: Storage account names are unique. Make sure to use a different name in this command, also in the next steps involving the storage account**
 
 ### Create a User Managed Identity
 
 ```powershell
-az identity create  -n mlopsdemostgacc --query id -o tsv -g rg-ml-mlopsworkspaces-jb
+az identity create  -n mlopsuidemo --query id -o tsv -g rg-demo-mlops
 ```
 
-Get the result and add the string in the create compute script yml file.
+Save the string and update the yml files in **/compute** folder
+
+![image](https://user-images.githubusercontent.com/31459994/192035873-4d3d75a2-cd6b-4444-99ab-5c3ad10a6896.png)
+
+
 Example:
-./compute/computedev.yml --> /subscriptions/.../resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mlopsdemostgacc
+
+./compute/computedev.yml:
+
+```
+user_assigned_identities: 
+    - resource_id: "/subscriptions/.../resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mlopsdemostgacc"
+```
+(using the string result of az identity create cmd)
 
 ### Create Compute
 
 Dev: 
 
 ```powershell
-az ml compute create -f ./compute/computedev.yml --workspace-name mlopsdemojb01 --resource-group rg-ml-mlopsworkspaces-jb
+az ml compute create -f ./compute/computedev.yml --workspace-name ml-workspace-demo-s-01 --resource-group rg-demo-mlops
 ```
 
 Test: 
 
 ```powershell
-az ml compute create -f ./compute/computetest.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
+az ml compute create -f ./compute/computetest.yml --workspace-name ml-workspace-demo-s-02 --resource-group rg-demo-mlops
 ```
 
 Prod: 
 
 ```powershell
-az ml compute create -f ./compute/computeprod.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
+az ml compute create -f ./compute/computeprod.yml --workspace-name ml-workspace-demo-s-03 --resource-group rg-demo-mlops
 ```
 
 Grant access on the Storage Account you will use for the demo:
 
-![image](https://user-images.githubusercontent.com/31459994/189962665-1ca157b1-fc19-4c5f-a6c1-1658c5750e95.png)
+First, check the ID of the identity you created previously:
+
+```powershell
+az identity show --name mlopsuidemo --resource-group rg-demo-mlops --query principalId -o tsv
+```
+
+Get the **principalId** or use the PS below:
+
+```powershell
+$identity=$(az identity show --name mlopsuidemo --resource-group rg-demo-mlops --query principalId -o tsv)
+
+az role assignment create --role "Storage Blob Data Contributor" --assignee-object-id $identity --scope "/subscriptions/6fab1661-47ae-49ea-ac8d-754881112b55/resourceGroups/rg-demo-storage-mlops/providers/Microsoft.Storage/storageAccounts/stgaccmlops2demo"
+```
+
+![image](https://user-images.githubusercontent.com/31459994/192043054-efa6d3c0-f69c-49c5-a126-0c38dd817929.png)
+
 
 Also grant access to the AML Workspaces identities:
 
