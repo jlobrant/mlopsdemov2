@@ -29,48 +29,40 @@ Use the root folder for this demo
 
 ### Edit the **env.ps1** file in the **scripts** folder
 
-Update the **$resource_sufix** parameter before setting the environment variables
+Update the **$resource_sufix** parameter before setting the environment variables (executing the env.ps1)
 
 ![image](https://user-images.githubusercontent.com/31459994/192061284-b67169b3-7778-49e6-9f62-e87a2e9f3a2e.png)
 
-Execute the following PS script
+### Execute the PS script to set the environment variables
 
 ```powershell
 . .\scripts\env.ps1
 ```
 
-### Execute the PS script to set the environment variables
-
-
-### Create the resource group you will use in this demo
+### Create the ML resource group you will use in this demo
 
 ```powershell
-az group create -l eastus2 -n rg-demo-mlops
+az group create -l $resource_region -n $resource_group_ml
 ```
 
-### Create 3 AML Workspaces to use in the demo
-
-Before executing the az cli commands, please update the workspace names in yml files. The workspaces yml files are stored in the **/workspace** folder.
-
-![image](https://user-images.githubusercontent.com/31459994/192031844-09031ce6-3c7f-489c-8418-99b7d02a9c71.png)
-
+### Create the 3 AML Workspaces to use in this demo (Dev, Test and Prod)
 
 01 - Create Dev Workspace
 
 ```powershell
-az ml workspace create --file ./workspace/devworkspace.yml --resource-group rg-demo-mlops
+az ml workspace create --resource-group $resource_group_ml --name $workspace01 --location $resource_region --display-name "Dev Workspace"
 ```
 
 02 - Create Test Workspace
 
 ```powershell
-az ml workspace create --file ./workspace/testworkspace.yml --resource-group rg-demo-mlops
+az ml workspace create --resource-group $resource_group_ml --name $workspace02 --location $resource_region --display-name "Test Workspace"
 ```
 
 03 - Create Prod Workspace
 
 ```powershell
-az ml workspace create --file ./workspace/prodworkspace.yml --resource-group rg-demo-mlops
+az ml workspace create --resource-group $resource_group_ml --name $workspace03 --location $resource_region --display-name "Prod Workspace"
 ```
 
 Example
