@@ -55,10 +55,19 @@ Example
 
 ### Create a Storage Account
 
-Create a storage account that you will use in the demo. Example: **developmentjbdemo**
+Create the Storage Acc group
 
-![image](https://user-images.githubusercontent.com/31459994/192010503-24815bf4-9453-4df8-a328-0310478d679d.png)
+```powershell
+az group create -l eastus2 -n rg-demo-storage-mlops
+```
 
+Create a storage account 
+
+```powershell
+az storage account create --name stgaccmlops2demo --resource-group rg-demo-storage-mlops --location eastus2 --sku Standard_ZRS --kind StorageV2 --enable-hierarchical-namespace true
+```
+
+**Important: Storage account names are unique. Make sure to use a different name in this command, also in the next steps involving the storage account**
 
 ### Create a User Managed Identity
 
