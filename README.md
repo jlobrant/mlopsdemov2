@@ -116,23 +116,21 @@ az ml compute create -f ./compute/computeprod.yml --workspace-name $workspace03 
 
 Grant access on the Storage Account you will use for the demo:
 
-First, check the ID of the identity you created previously:
 
 ```powershell
-az identity show --name mlopsuidemo --resource-group rg-demo-mlops --query principalId -o tsv
+$storage_acc_id=$(az storage account show --name $storage_name --resource-group $resource_group_stg --query id -o tsv)
+
+$managed_identity_principal_id=$(az identity show --name $managed_identity_mlgroup --resource-group $resource_group_ml --query principalId -o tsv)
+
+az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $managed_identity_principal_id --scope $storage_acc_id
 ```
 
-Get the **principalId** or use the PS below:
-
-```powershell
-$identity=$(az identity show --name mlopsuidemo --resource-group rg-demo-mlops --query principalId -o tsv)
-
-az role assignment create --role "Storage Blob Data Contributor" --assignee-object-id $identity --scope "/subscriptions/6fab1661-47ae-49ea-ac8d-754881112b55/resourceGroups/rg-demo-storage-mlops/providers/Microsoft.Storage/storageAccounts/stgaccmlops2demo"
-```
-
-![image](https://user-images.githubusercontent.com/31459994/192043054-efa6d3c0-f69c-49c5-a126-0c38dd817929.png)
+![image](https://user-images.githubusercontent.com/31459994/192065630-f51fd071-0453-4cac-872e-cd70d31eb326.png)
 
 ... to be continued
+
+
+
 
 # Old demo 
 
