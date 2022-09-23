@@ -25,6 +25,11 @@ az group create -l eastus2 -n rg-demo-mlops
 
 ### Create 3 AML Workspaces to use in the demo
 
+Before executing the az cli commands, please update the workspace names in yml files.
+
+![image](https://user-images.githubusercontent.com/31459994/192031844-09031ce6-3c7f-489c-8418-99b7d02a9c71.png)
+
+
 01 - Dev Workspace
 
 ```powershell
@@ -33,11 +38,19 @@ az ml workspace create --file ./workspace/devworkspace.yml --resource-group rg-d
 
 02 - Test Workspace
 
+```powershell
+az ml workspace create --file ./workspace/testworkspace.yml --resource-group rg-demo-mlops
+```
+
 03 - Prod Workspace
+
+```powershell
+az ml workspace create --file ./workspace/prodworkspace.yml --resource-group rg-demo-mlops
+```
 
 Example
 
-![image](https://user-images.githubusercontent.com/31459994/192010305-3dc1bf34-68f1-468d-84c3-f98d2d267a20.png)
+![image](https://user-images.githubusercontent.com/31459994/192032047-b2f2fbe5-4f01-496e-b26d-435a505dcb55.png)
 
 
 ### Create a Storage Account
