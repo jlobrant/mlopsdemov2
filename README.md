@@ -25,7 +25,7 @@ az group create -l eastus2 -n rg-demo-mlops
 
 ### Create 3 AML Workspaces to use in the demo
 
-Before executing the az cli commands, please update the workspace names in yml files. The workspaces yml files are stored in the **workspace** folder.
+Before executing the az cli commands, please update the workspace names in yml files. The workspaces yml files are stored in the **/workspace** folder.
 
 ![image](https://user-images.githubusercontent.com/31459994/192031844-09031ce6-3c7f-489c-8418-99b7d02a9c71.png)
 
@@ -72,12 +72,21 @@ az storage account create --name stgaccmlops2demo --resource-group rg-demo-stora
 ### Create a User Managed Identity
 
 ```powershell
-az identity create  -n mlopsdemostgacc --query id -o tsv -g rg-ml-mlopsworkspaces-jb
+az identity create  -n mlopsuidemo --query id -o tsv -g rg-demo-mlops
 ```
 
-Get the result and add the string in the create compute script yml file.
+Save the string and update the yml files in **/compute** folder
+
+
 Example:
-./compute/computedev.yml --> /subscriptions/.../resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mlopsdemostgacc
+
+./compute/computedev.yml:
+
+```
+user_assigned_identities: 
+    - resource_id: "/subscriptions/.../resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mlopsdemostgacc"
+```
+(using the string result of az identity create cmd)
 
 ### Create Compute
 
