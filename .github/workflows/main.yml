@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   deployment:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     environment: demo
     steps:
     
@@ -20,13 +20,38 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         
-    - name: Install AZ ML CLIv2
+    - name: Install AZ ML CLIv2 1
       uses: azure/CLI@v1
       continue-on-error: true
       with:
        azcliversion: latest
        inlineScript: |
-            curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash az extension add -n ml -y       
+            az extension remove -n azure-cli-ml     
+
+    - name: Install AZ ML CLIv2 2
+      uses: azure/CLI@v1
+      continue-on-error: true
+      with:
+       azcliversion: latest
+       inlineScript: |
+            az extension remove -n ml   
+
+    - name: Install AZ ML CLIv2 3
+      uses: azure/CLI@v1
+      continue-on-error: true
+      with:
+       azcliversion: latest
+       inlineScript: |
+            az extension add -n ml -y   
+
+
+    - name: Install AZ ML CLIv2 4
+      uses: azure/CLI@v1
+      continue-on-error: true
+      with:
+       azcliversion: latest
+       inlineScript: |
+            az extension update -n ml  
 
             
     - name: Execute ML Pipeline
