@@ -4,7 +4,7 @@
 
 # Step by Step guide - Manual Execution (Learning purpose)
 
-## Setting up new MLOPS
+## Prerequisite - Setting up new MLOPS
 
 Note: Run all scripts in the root folder
 
@@ -79,7 +79,7 @@ Use the following structure in test and prod containers
 Upload the file **taxi-batch.csv** to test and prod containers under the **taxibatch** directory. The file is in the **/data** directory
 
 
-## Dev Steps - Workspace 01 (Dev)
+## 1) Dev Steps - Workspace 01 (Dev)
 
 ### Create AML Environment
 
@@ -93,7 +93,7 @@ az ml environment create --file ./dev/train-env.yml --workspace-name mlopsdemojb
 az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
 ```
 
-## Test Steps - Workspace 02 (Test)
+## 2) Test Steps - Workspace 02 (Test)
 
 ### Create AML Enviroment
 
@@ -145,7 +145,7 @@ az ml batch-deployment create --file ./test/batch-deployment-test.yml --resource
 az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-test --deployment-name batch-dp-mlopsdemo-test  --input-type uri_file --input azureml://datastores/mlopsdemotestcointainer/paths/taxibatch/taxi-batch.csv  --resource-group rg-ml-mlopsworkspaces-jb  --workspace-name mlopsdemojb02 --output-path azureml://datastores/mlopsdemotestcointainer/paths/taxioutput
 ```
 
-## Prod Steps - Workspace 03 (Prod)
+## 3) Prod Steps - Workspace 03 (Prod)
 
 ### Create Environment
 
@@ -227,8 +227,13 @@ az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-n
 
 # GitHub Actions
 
+## Dev Actions
 
-### ... Coming Soon
+Please check the Actions section in this repository:
+
+![image](https://user-images.githubusercontent.com/31459994/192027244-cd908da0-5969-4aff-a6d3-7a756da3dfc1.png)
+
+
 
 ---------------------------------------------------------------------------------------------------------------
 
