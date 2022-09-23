@@ -17,6 +17,31 @@ If you need any assistance to set this up, check the link below:
 
 [VSCode - Source Control](https://code.visualstudio.com/docs/sourcecontrol/overview)
 
+### **IMPORTANT!!!** Execute the demo in the root folder of your project
+
+Open a New Terminal
+
+![image](https://user-images.githubusercontent.com/31459994/192061495-90f3ac5c-9367-4daa-aad9-a1d91cd12870.png)
+
+Use the root folder for this demo
+
+![image](https://user-images.githubusercontent.com/31459994/192061574-b38230b4-05e8-4ff8-8a58-17a9424bb353.png)
+
+### Edit the **env.ps1** file in the **scripts** folder
+
+Update the **$resource_sufix** parameter before setting the environment variables
+
+![image](https://user-images.githubusercontent.com/31459994/192061284-b67169b3-7778-49e6-9f62-e87a2e9f3a2e.png)
+
+Execute the following PS script
+
+```powershell
+. .\scripts\env.ps1
+```
+
+### Execute the PS script to set the environment variables
+
+
 ### Create the resource group you will use in this demo
 
 ```powershell
