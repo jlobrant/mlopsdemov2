@@ -16,6 +16,12 @@ Note: Run all scripts in the root folder
 
 03 - Prod Workspace
 
+#### Example
+
+![image](https://user-images.githubusercontent.com/31459994/192010305-3dc1bf34-68f1-468d-84c3-f98d2d267a20.png)
+
+
+
 ### Create a Storage Account and Containers
 
 Create a storage account that you will use in the demo. Example: developmentjbdemo
