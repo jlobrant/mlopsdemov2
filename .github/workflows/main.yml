@@ -1,4 +1,5 @@
-on: push
+on:
+      workflow_dispatch:
 #      push:
 #            paths:
 #                  - 'data-science/**'
@@ -25,7 +26,7 @@ jobs:
         
 
     - name: Setup Azure ML Cli
-      run: bash setup.sh
+      run: bash setupml.sh
       working-directory: scripts
             
     - name: Execute ML Pipeline
