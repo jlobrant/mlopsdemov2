@@ -72,7 +72,7 @@ You should see this in your RG after this step
 
 ### Create a Storage Account
 
-Create the Storage Acc group
+Create the storage account group
 
 ```powershell
 az group create -l $resource_region -n $resource_group_stg
@@ -84,47 +84,34 @@ Create a storage account
 az storage account create --name $storage_name --resource-group $resource_group_stg --location $resource_region --sku Standard_ZRS --kind StorageV2 --enable-hierarchical-namespace true
 ```
 
-**Important: Storage account names are unique. Make sure to use a different name in this command, also in the next steps involving the storage account**
+**Important: Storage account names are unique. Make sure to use a different sufix in a new demo
 
 ### Create a User Managed Identity
 
+Execute the cmd below. It will store the ID if the managed identity in the $managed_identity_id
+
 ```powershell
-az identity create  -n mlopsuidemo --query id -o tsv -g rg-demo-mlops
+$managed_identity_id=$(az identity create  -n $managed_identity_mlgroup --query id -o tsv -g $resource_group_ml)
 ```
 
-Save the string and update the yml files in **/compute** folder
-
-![image](https://user-images.githubusercontent.com/31459994/192035873-4d3d75a2-cd6b-4444-99ab-5c3ad10a6896.png)
-
-
-Example:
-
-./compute/computedev.yml:
-
-```
-user_assigned_identities: 
-    - resource_id: "/subscriptions/.../resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mlopsdemostgacc"
-```
-(using the string result of az identity create cmd)
-
-### Create Compute
+### Create Compute in all AML workspaces
 
 Dev: 
 
 ```powershell
-az ml compute create -f ./compute/computedev.yml --workspace-name ml-workspace-demo-s-01 --resource-group rg-demo-mlops
+az ml compute create -f ./compute/computedev.yml --workspace-name $workspace01 --resource-group $resource_group_ml --identity-type user_assigned --user-assigned-identities $managed_identity_id
 ```
 
 Test: 
 
 ```powershell
-az ml compute create -f ./compute/computetest.yml --workspace-name ml-workspace-demo-s-02 --resource-group rg-demo-mlops
+az ml compute create -f ./compute/computetest.yml --workspace-name $workspace02 --resource-group $resource_group_ml --identity-type user_assigned --user-assigned-identities $managed_identity_id
 ```
 
 Prod: 
 
 ```powershell
-az ml compute create -f ./compute/computeprod.yml --workspace-name ml-workspace-demo-s-03 --resource-group rg-demo-mlops
+az ml compute create -f ./compute/computeprod.yml --workspace-name $workspace03 --resource-group $resource_group_ml --identity-type user_assigned --user-assigned-identities $managed_identity_id
 ```
 
 Grant access on the Storage Account you will use for the demo:
