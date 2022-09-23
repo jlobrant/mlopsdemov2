@@ -128,6 +128,10 @@ az role assignment create --role "Storage Blob Data Contributor" --assignee-obje
 
 ![image](https://user-images.githubusercontent.com/31459994/192043054-efa6d3c0-f69c-49c5-a126-0c38dd817929.png)
 
+... to be continued
+
+# Old demo 
+
 
 Also grant access to the AML Workspaces identities:
 
