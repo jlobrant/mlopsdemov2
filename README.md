@@ -173,6 +173,23 @@ az storage container create --name mlopsdemotest --account-name $storage_name --
 az storage container create --name mlopsdemoprod --account-name $storage_name --resource-group $resource_group_stg
 ```
 
+![image](https://user-images.githubusercontent.com/31459994/192067816-f7eb4731-a43b-4aa5-90df-966aa484c8a1.png)
+
+Upload the csv file that will be used in batch deployment to the proper directory
+
+```PowerShell
+az storage azcopy blob upload -c mlopsdemotest --account-name $storage_name -s "data/taxi-batch.csv" -d "taxibatch/taxi-batch.csv"
+```
+
+![image](https://user-images.githubusercontent.com/31459994/192067983-ebe18c6f-7961-4521-b856-f7b8b1f13aaa.png)
+
+Repeate for **prod** container
+
+```PowerShell
+az storage azcopy blob upload -c mlopsdemoprod --account-name $storage_name -s "data/taxi-batch.csv" -d "taxibatch/taxi-batch.csv"
+```
+
+... to be continued
 
 Use the following structure in test and prod containers
 
