@@ -1,8 +1,8 @@
 on:
       workflow_dispatch:
-#      push:
-#            paths:
-#                  - 'data-science/**'
+      push:
+            paths:
+                  - 'data-science/**'
 
 permissions:
       id-token: write
