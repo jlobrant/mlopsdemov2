@@ -112,7 +112,22 @@ az ml compute create -f ./compute/computeprod.yml --workspace-name ml-workspace-
 
 Grant access on the Storage Account you will use for the demo:
 
-![image](https://user-images.githubusercontent.com/31459994/189962665-1ca157b1-fc19-4c5f-a6c1-1658c5750e95.png)
+First, check the ID of the identity you created previously:
+
+```powershell
+az identity show --name mlopsuidemo --resource-group rg-demo-mlops --query principalId -o tsv
+```
+
+Get the **principalId** or use the PS below:
+
+```powershell
+$identity=$(az identity show --name mlopsuidemo --resource-group rg-demo-mlops --query principalId -o tsv)
+
+az role assignment create --role "Storage Blob Data Contributor" --assignee-object-id $identity --scope "/subscriptions/6fab1661-47ae-49ea-ac8d-754881112b55/resourceGroups/rg-demo-storage-mlops/providers/Microsoft.Storage/storageAccounts/stgaccmlops2demo"
+```
+
+![image](https://user-images.githubusercontent.com/31459994/192043054-efa6d3c0-f69c-49c5-a126-0c38dd817929.png)
+
 
 Also grant access to the AML Workspaces identities:
 
