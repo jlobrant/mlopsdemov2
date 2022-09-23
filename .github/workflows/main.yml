@@ -1,4 +1,7 @@
 on: push
+#      push:
+#            paths:
+#                  - 'data-science/**'
 
 permissions:
       id-token: write
@@ -22,6 +25,6 @@ jobs:
       with:
        azcliversion: latest
        inlineScript: |
-        az account set --subscription "6fab1661-47ae-49ea-ac8d-754881112b55"
+        az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
 
       
