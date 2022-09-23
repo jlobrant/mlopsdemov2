@@ -2,7 +2,7 @@
 
 ![image](https://user-images.githubusercontent.com/31459994/189961497-b7516d79-594c-4f92-9234-0770f9586860.png)
 
-# Setting up new MLOPS
+# Setting up new MLOPS - Step by Step guide - Manual Execution (Learning purpose)
 
 Note: Run all scripts in the root folder
 
@@ -214,6 +214,12 @@ az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-n
 ![image](https://user-images.githubusercontent.com/31459994/189991684-ac0a69e2-8c83-4296-b2ad-dbc8ab08bf4d.png)
 
 ![image](https://user-images.githubusercontent.com/31459994/189991726-34e220fa-7040-4687-8603-23f58c4523ba.png)
+
+---------------------------------------------------------------------------------------------------------------
+
+# GitHub Actions
+
+### ... Coming Soon
 
 ---------------------------------------------------------------------------------------------------------------
 
