@@ -22,9 +22,7 @@ jobs:
         
 
     - name: Setup Azure ML Cli
-      run: bash setup.sh
-      working-directory: scripts
-
+      run: bash ./scripts/setup.sh
             
     - name: Execute ML Pipeline
       run: az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
