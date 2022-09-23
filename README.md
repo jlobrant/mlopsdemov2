@@ -35,13 +35,13 @@ Update the **$resource_sufix** parameter before setting the environment variable
 
 ### Execute the PS script to set the environment variables
 
-```powershell
+```PowerShell
 . .\scripts\env.ps1
 ```
 
 ### Create the ML resource group you will use in this demo
 
-```powershell
+```PowerShell
 az group create -l $resource_region -n $resource_group_ml
 ```
 
@@ -49,19 +49,19 @@ az group create -l $resource_region -n $resource_group_ml
 
 01 - Create Dev Workspace
 
-```powershell
+```PowerShell
 az ml workspace create --resource-group $resource_group_ml --name $workspace01 --location $resource_region --display-name "Dev Workspace"
 ```
 
 02 - Create Test Workspace
 
-```powershell
+```PowerShell
 az ml workspace create --resource-group $resource_group_ml --name $workspace02 --location $resource_region --display-name "Test Workspace"
 ```
 
 03 - Create Prod Workspace
 
-```powershell
+```PowerShell
 az ml workspace create --resource-group $resource_group_ml --name $workspace03 --location $resource_region --display-name "Prod Workspace"
 ```
 
@@ -74,13 +74,13 @@ You should see this in your RG after this step
 
 Create the storage account group
 
-```powershell
+```PowerShell
 az group create -l $resource_region -n $resource_group_stg
 ```
 
 Create a storage account 
 
-```powershell
+```PowerShell
 az storage account create --name $storage_name --resource-group $resource_group_stg --location $resource_region --sku Standard_ZRS --kind StorageV2 --enable-hierarchical-namespace true
 ```
 
@@ -90,7 +90,7 @@ az storage account create --name $storage_name --resource-group $resource_group_
 
 Execute the cmd below. It will store the ID if the managed identity in the $managed_identity_id
 
-```powershell
+```PowerShell
 $managed_identity_id=$(az identity create  -n $managed_identity_mlgroup --query id -o tsv -g $resource_group_ml)
 ```
 
@@ -98,26 +98,26 @@ $managed_identity_id=$(az identity create  -n $managed_identity_mlgroup --query 
 
 Dev: 
 
-```powershell
+```PowerShell
 az ml compute create -f ./compute/computedev.yml --workspace-name $workspace01 --resource-group $resource_group_ml --identity-type user_assigned --user-assigned-identities $managed_identity_id
 ```
 
 Test: 
 
-```powershell
+```PowerShell
 az ml compute create -f ./compute/computetest.yml --workspace-name $workspace02 --resource-group $resource_group_ml --identity-type user_assigned --user-assigned-identities $managed_identity_id
 ```
 
 Prod: 
 
-```powershell
+```PowerShell
 az ml compute create -f ./compute/computeprod.yml --workspace-name $workspace03 --resource-group $resource_group_ml --identity-type user_assigned --user-assigned-identities $managed_identity_id
 ```
 
 Grant access on the Storage Account you will use for the demo:
 
 
-```powershell
+```PowerShell
 $storage_acc_id=$(az storage account show --name $storage_name --resource-group $resource_group_stg --query id -o tsv)
 
 $managed_identity_principal_id=$(az identity show --name $managed_identity_mlgroup --resource-group $resource_group_ml --query principalId -o tsv)
@@ -127,18 +127,19 @@ az role assignment create --role "Storage Blob Data Owner" --assignee-object-id 
 
 ![image](https://user-images.githubusercontent.com/31459994/192065630-f51fd071-0453-4cac-872e-cd70d31eb326.png)
 
-... to be continued
 
 
+Grant access to the AML Workspaces managed identities:
 
+```PowerShell
+$workspace01spID=$(az resource list -n $workspace01 --resource-group $resource_group_ml --query [*].identity.principalId --out tsv)
+$workspace02spID=$(az resource list -n $workspace02 --resource-group $resource_group_ml --query [*].identity.principalId --out tsv)
+$workspace03spID=$(az resource list -n $workspace03 --resource-group $resource_group_ml --query [*].identity.principalId --out tsv)
 
-# Old demo 
-
-
-Also grant access to the AML Workspaces identities:
-
-![image](https://user-images.githubusercontent.com/31459994/190242807-9692a5d5-2246-4fee-83ca-eaab33dcba45.png)
-
+az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $workspace01spID --scope $storage_acc_id
+az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $workspace02spID --scope $storage_acc_id
+az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $workspace03spID --scope $storage_acc_id
+```
 
 ### Create the containers in the Storage Account
 
