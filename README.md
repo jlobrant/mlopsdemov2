@@ -141,13 +141,25 @@ az role assignment create --role "Storage Blob Data Owner" --assignee-object-id 
 az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $workspace03spID --scope $storage_acc_id
 ```
 
+Also give access to your own id
+
+```PowerShell
+$selfid=$(az ad signed-in-user show --query id -o tsv)
+az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $selfid --scope $storage_acc_id
+```
+
 Storage Access Control screenshot
 ![image](https://user-images.githubusercontent.com/31459994/192066302-2f920320-7cd5-4b36-a77b-02c64c6e4a03.png)
 
 
 ### Create the containers in the Storage Account
 
-![image](https://user-images.githubusercontent.com/31459994/189990051-91c17663-d9ad-4fc5-bdd3-ecbf2426b735.png)
+```PowerShell
+az storage container create --name mlopsdemodev --account-name $storage_name --resource-group $resource_group_stg
+az storage container create --name mlopsdemotest --account-name $storage_name --resource-group $resource_group_stg
+az storage container create --name mlopsdemoprod --account-name $storage_name --resource-group $resource_group_stg
+```
+
 
 Use the following structure in test and prod containers
 
