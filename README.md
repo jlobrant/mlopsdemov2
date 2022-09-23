@@ -6,15 +6,17 @@
 
 ## Prerequisite - Setting up new MLOPS
 
-Use Visual Studio Code and clone this repository:
+### Use Visual Studio Code and clone this repository:
 
 ![image](https://user-images.githubusercontent.com/31459994/192029368-4faaf3e2-d160-4cbd-830a-c29ed9218624.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192029880-f2310bd5-cbab-452e-89b0-d6fdf6a281be.png)
+
 
 If you need any assistance to set this up, check the link below:
 
 [VSCode - Source Control](https://code.visualstudio.com/docs/sourcecontrol/overview)
 
-Note: Run all scripts in the root folder
 
 ### Create 3 AML Workspaces to use in the demo
 
