@@ -141,6 +141,10 @@ az role assignment create --role "Storage Blob Data Owner" --assignee-object-id 
 az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $workspace03spID --scope $storage_acc_id
 ```
 
+Storage Access Control screenshot
+![image](https://user-images.githubusercontent.com/31459994/192066302-2f920320-7cd5-4b36-a77b-02c64c6e4a03.png)
+
+
 ### Create the containers in the Storage Account
 
 ![image](https://user-images.githubusercontent.com/31459994/189990051-91c17663-d9ad-4fc5-bdd3-ecbf2426b735.png)
