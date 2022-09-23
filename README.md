@@ -65,9 +65,9 @@ az ml workspace create --resource-group $resource_group_ml --name $workspace02 -
 az ml workspace create --resource-group $resource_group_ml --name $workspace03 --location $resource_region --display-name "Prod Workspace"
 ```
 
-Example
+You should see this in your RG after this step
 
-![image](https://user-images.githubusercontent.com/31459994/192032047-b2f2fbe5-4f01-496e-b26d-435a505dcb55.png)
+![image](https://user-images.githubusercontent.com/31459994/192062910-e1d306ca-7c1d-41cf-af2c-273a503bd966.png)
 
 
 ### Create a Storage Account
@@ -75,13 +75,13 @@ Example
 Create the Storage Acc group
 
 ```powershell
-az group create -l eastus2 -n rg-demo-storage-mlops
+az group create -l $resource_region -n $resource_group_stg
 ```
 
 Create a storage account 
 
 ```powershell
-az storage account create --name stgaccmlops2demo --resource-group rg-demo-storage-mlops --location eastus2 --sku Standard_ZRS --kind StorageV2 --enable-hierarchical-namespace true
+az storage account create --name $storage_name --resource-group $resource_group_stg --location $resource_region --sku Standard_ZRS --kind StorageV2 --enable-hierarchical-namespace true
 ```
 
 **Important: Storage account names are unique. Make sure to use a different name in this command, also in the next steps involving the storage account**
