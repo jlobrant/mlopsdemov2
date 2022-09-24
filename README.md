@@ -1,6 +1,14 @@
-# MLOps Demo Scenario
+# MLOps - Step by step guide
 
 ![image](https://user-images.githubusercontent.com/31459994/189961497-b7516d79-594c-4f92-9234-0770f9586860.png)
+
+This guide was inspired by the Azure MLOPs (v2) solution accelerator, and the objective is to help you understant all steps involved in building the foundation for an end2end MLOPs environment.
+
+Please checkout the MLOPs (v2) solution accelerator repository for more information:
+
+
+[Azure MLOps (v2) solution accelerator](https://github.com/Azure/mlops-v2)
+
 
 # Step by Step guide - Manual Execution (Learning purpose)
 
