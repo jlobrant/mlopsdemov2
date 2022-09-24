@@ -219,14 +219,12 @@ After this command, a pipeline will be triggered in the Dev workspace. The resul
 ![image](https://user-images.githubusercontent.com/31459994/192121950-1b336999-be3f-498e-bcb2-b79af391a797.png)
 
 
-
-
-## 2) Test Steps - Workspace 02 (Test)
+## 2) Test Workspace Steps
 
 ### Create AML Enviroment
 
 ```powershell
-az ml environment create --file ./test/test-env.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
+az ml environment create --file ./test/test-env.yml --workspace-name $workspace02 --resource-group $resource_group_ml
 ```
 
 ### Create datastore and data asset
@@ -234,7 +232,7 @@ az ml environment create --file ./test/test-env.yml --workspace-name mlopsdemojb
 Datastore
 
 ```powershell
-az ml datastore create --file ./test/data-store.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
+az ml datastore create --file ./test/data-store.yml --workspace-name $workspace02 --resource-group $resource_group_ml
 ```
 
 Data Asset
