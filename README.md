@@ -19,19 +19,6 @@ If you need any assistance to set this up, check the link below:
 
 ### **IMPORTANT!!!** Execute the demo in the root folder of your project
 
-Authenticate using az login
-
-```PowerShell
-az login
-```
-
-Also set the default subscription id
-
-```PowerShell
-az account set --subscription "YOUR-SUBSCRIPTION-ID"
-```
-
-
 Open a New Terminal
 
 ![image](https://user-images.githubusercontent.com/31459994/192061495-90f3ac5c-9367-4daa-aad9-a1d91cd12870.png)
@@ -39,6 +26,18 @@ Open a New Terminal
 Use the root folder for this demo
 
 ![image](https://user-images.githubusercontent.com/31459994/192061574-b38230b4-05e8-4ff8-8a58-17a9424bb353.png)
+
+### Authenticate using az login and set the default subscription
+
+```Shell
+az login
+```
+
+Also set the default subscription id
+
+```Shell
+az account set --subscription "YOUR-SUBSCRIPTION-ID"
+```
 
 ### Edit the **env.ps1** file in the **scripts** folder
 
