@@ -29,13 +29,13 @@ Use the root folder for this demo
 
 ### Authenticate using az login and set the default subscription
 
-```Shell
+```PowerShell
 az login
 ```
 
 Also set the default subscription id
 
-```Shell
+```PowerShell
 az account set --subscription "YOUR-SUBSCRIPTION-ID"
 ```
 
@@ -178,39 +178,40 @@ Upload the csv file that will be used in batch deployment to the proper director
 
 ```PowerShell
 az storage azcopy blob upload -c mlopsdemotest --account-name $storage_name -s "data/taxi-batch.csv" -d "taxibatch/taxi-batch.csv"
+
+az storage azcopy blob upload -c mlopsdemotest --account-name $storage_name -s "data/taxi-request.json" -d "taxioutput/taxi-request.json"
 ```
 
 ![image](https://user-images.githubusercontent.com/31459994/192067983-ebe18c6f-7961-4521-b856-f7b8b1f13aaa.png)
 
-Repeate for **prod** container
+Repeat for **prod** container
 
 ```PowerShell
 az storage azcopy blob upload -c mlopsdemoprod --account-name $storage_name -s "data/taxi-batch.csv" -d "taxibatch/taxi-batch.csv"
+
+az storage azcopy blob upload -c mlopsdemoprod --account-name $storage_name -s "data/taxi-request.json" -d "taxioutput/taxi-request.json"
 ```
 
-... to be continued
-
-Use the following structure in test and prod containers
-
-![image](https://user-images.githubusercontent.com/31459994/189990148-a45364ef-ec1d-41b6-8f2b-4c58b1ee4a61.png)
-
-
-Upload the file **taxi-batch.csv** to test and prod containers under the **taxibatch** directory. The file is in the **/data** directory
-
-
-## 1) Dev Steps - Workspace 01 (Dev)
+## 1) Dev Workspace Steps
 
 ### Create AML Environment
 
 ```powershell
-az ml environment create --file ./dev/train-env.yml --workspace-name mlopsdemojb01 --resource-group rg-ml-mlopsworkspaces-jb
+az ml environment create --file ./dev/train-env.yml --workspace-name $workspace01 --resource-group $resource_group_ml
 ```
 
 ### Pipeline run
 
 ```powershell
-az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
+az ml job create --file ./dev/pipeline.yml --resource-group $resource_group_ml --workspace-name $workspace01
 ```
+
+After this command, a pipeline will be triggered in the Dev workspace. The result of this execution is a model being registered in the Dev workspace.
+
+![image](https://user-images.githubusercontent.com/31459994/192121950-1b336999-be3f-498e-bcb2-b79af391a797.png)
+
+
+
 
 ## 2) Test Steps - Workspace 02 (Test)
 
