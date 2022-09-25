@@ -353,13 +353,248 @@ az ml batch-endpoint invoke --name $endpoint_name_prod --deployment-name batch-d
 
 # GitHub Actions (in development)
 
-## Dev Actions
+## Setup GitHub Authentication
 
-Please check the Actions section in this repository:
+### Create application and service principal
 
-![image](https://user-images.githubusercontent.com/31459994/192027244-cd908da0-5969-4aff-a6d3-7a756da3dfc1.png)
+You'll need to create an Azure Active Directory application and service principal and then assign a role on your subscription to your application so that your workflow has access to your subscription
+
+You will create one Service Principal per environment
+
+```powershell
+$githubapp_dev="gitAppdev$resource_sufix"
+$githubapp_test="gitApptest$resource_sufix"
+$githubapp_prod="gitAppprod$resource_sufix"
+
+az ad app create --display-name $githubapp_dev
+az ad app create --display-name $githubapp_test
+az ad app create --display-name $githubapp_prod
+
+$githubapp_dev_cid=$(az ad app list --display-name $githubapp_dev --query [*].appId -o tsv)
+$githubapp_dev_oid=$(az ad app list --display-name $githubapp_dev --query [*].id -o tsv)
+az ad sp create --id $githubapp_dev_cid
+
+$githubapp_dev_assigneeid=$(az ad sp show --id $githubapp_dev_cid --query id -o tsv)
+az role assignment create --role contributor --subscription $subscriptionId --assignee-object-id  $githubapp_dev_assigneeid --assignee-principal-type ServicePrincipal --scope /subscriptions/$subscriptionId/resourceGroups/$resource_group_ml
+
+$githubapp_test_cid=$(az ad app list --display-name $githubapp_test --query [*].appId -o tsv)
+$githubapp_test_oid=$(az ad app list --display-name $githubapp_test --query [*].id -o tsv)
+az ad sp create --id $githubapp_test_cid
+
+$githubapp_test_assigneeid=$(az ad sp show --id $githubapp_test_cid --query id -o tsv)
+az role assignment create --role contributor --subscription $subscriptionId --assignee-object-id  $githubapp_test_assigneeid --assignee-principal-type ServicePrincipal --scope /subscriptions/$subscriptionId/resourceGroups/$resource_group_ml
 
 
+$githubapp_prod_cid=$(az ad app list --display-name $githubapp_prod --query [*].appId -o tsv)
+$githubapp_prod_oid=$(az ad app list --display-name $githubapp_prod --query [*].id -o tsv)
+az ad sp create --id $githubapp_prod_cid
+
+$githubapp_prod_assigneeid=$(az ad sp show --id $githubapp_prod_cid --query id -o tsv)
+az role assignment create --role contributor --subscription $subscriptionId --assignee-object-id  $githubapp_prod_assigneeid --assignee-principal-type ServicePrincipal --scope /subscriptions/$subscriptionId/resourceGroups/$resource_group_ml
+
+```
+
+Set your GitHub name as an environment variable, and also the repository name
+
+Replace with yout GitHub account
+
+```powershell
+$github_org="jlobrant"
+$github_repo="mlopsdemov2"
+```
+
+Configure the GitHub connection
+
+```powershell
+$devgraphuri="https://graph.microsoft.com/beta/applications/$githubapp_dev_oid/federatedIdentityCredentials"
+$devgraphbody="{'name':'GitHubDevDeploy','issuer':'https://token.actions.githubusercontent.com','subject':'repo:$github_org/${github_repo}:environment:Dev','description':'Development Environment','audiences':['api://AzureADTokenExchange']}"
+
+az rest --method POST --uri $devgraphuri --body $devgraphbody
+```
+
+After this step, you will see the credential configured in the Azure portal under Application Registrations. Select the service principal you just created and select certificates and secrets from the menu on the left as shown in the screenshot below:
+<br />
+
+![image](https://user-images.githubusercontent.com/31459994/192126260-6bba566c-9abf-45f4-94f7-e45682212dca.png)
+
+Repeat this step for the Test and Prod Apps
+
+```powershell
+$testgraphuri="https://graph.microsoft.com/beta/applications/$githubapp_test_oid/federatedIdentityCredentials"
+$testgraphbody="{'name':'GitHubTestDeploy','issuer':'https://token.actions.githubusercontent.com','subject':'repo:$github_org/${github_repo}:environment:Test','description':'Test Environment','audiences':['api://AzureADTokenExchange']}"
+
+az rest --method POST --uri $testgraphuri --body $testgraphbody
+```
+
+```powershell
+$prodgraphuri="https://graph.microsoft.com/beta/applications/$githubapp_prod_oid/federatedIdentityCredentials"
+$prodgraphbody="{'name':'GitHubProdDeploy','issuer':'https://token.actions.githubusercontent.com','subject':'repo:$github_org/${github_repo}:environment:Prod','description':'Prod Environment','audiences':['api://AzureADTokenExchange']}"
+
+az rest --method POST --uri $prodgraphuri --body $prodgraphbody
+```
+
+## Configure your GitHub
+
+### Create the Environments in your GitHub repository
+
+This step will be necessary to allow you build an end2end Actions workflow
+
+![image](https://user-images.githubusercontent.com/31459994/192126516-4678deb0-8aa3-4332-8585-e8b5a6729fe4.png)
+
+Under Environment secrets, create secrets for **AZURE_CLIENT_ID**, **AZURE_TENANT_ID**, and **AZURE_SUBSCRIPTION_ID**
+
+![image](https://user-images.githubusercontent.com/31459994/192126618-ebab502b-49d9-4704-92bf-76f057367701.png)
+
+Get the values in App Resgistrations on Azure Portal. Also get your Subscription ID value
+
+![image](https://user-images.githubusercontent.com/31459994/192126658-47cbe81c-43b6-4926-a4a0-fc201b8620cc.png)
+
+Also, create a resource group secret and a workspace secret with the RG name and the workspace of the environment (example: Dev, Test and Prod according to the workspaces name)
+
+![image](https://user-images.githubusercontent.com/31459994/192126779-cba3aea1-f592-488b-917c-5fcbb1d29428.png)
+
+In Dev, use the value of the variable $workspace01, in Test $workspace02 and Prod $workspace03
+
+***IMPORTANT: Also create a WORKSPACE_NAME_DEV secret in Test and Prod, as you will need this to donwload the model from Dev to Register in the proper environment***
+
+![image](https://user-images.githubusercontent.com/31459994/192128261-59e0aded-bf83-4625-bde2-4ce11d2ef71b.png)
+
+Use the value from parameter $workspace01
+
+<br /><br />
+
+### Workflow Sample
+
+The following workflow sample is configured in this repository. This example will run a pipeline in Dev workspace, download the model and register the model in Test and Prod environment. You can improve this by adding other actions like invoking the endpoints and evaluating the results of the batch invoke
+
+```YAML
+on:
+      push:
+            paths:
+                  - 'data-science/**'
+
+permissions:
+      id-token: write
+      contents: read
+
+jobs:
+  Pipeline-Dev:
+    runs-on: ubuntu-latest
+    environment: Dev
+    steps:
+    
+    - name: check out repo
+      uses: actions/checkout@v2
+    
+    - name: login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+
+    - name: Setup Azure ML Cli
+      run: bash setupml.sh
+      working-directory: scripts
+            
+    - name: Execute ML Pipeline
+      run: az ml job create --file ./dev/pipeline.yml --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
+
+  Promote-to-Test:
+    runs-on: ubuntu-latest
+    environment: Test
+    needs: [Pipeline-Dev]
+    steps:
+    
+    - name: check out repo
+      uses: actions/checkout@v2
+    
+    - name: login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+
+    - name: Setup Azure ML Cli
+      run: bash setupml.sh
+      working-directory: scripts
+
+    - name: Download Model
+      run: az ml model download --name taxi-model-mlops-demo --version 1 --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME_DEV }} --download-path ./model
+            
+    - name: Register Model Test
+      run: az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
+
+  Promote-to-Prod:
+    runs-on: ubuntu-latest
+    environment: Prod
+    needs: [Pipeline-Dev,Promote-to-Test]
+    steps:
+    
+    - name: check out repo
+      uses: actions/checkout@v2
+    
+    - name: login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+
+    - name: Setup Azure ML Cli
+      run: bash setupml.sh
+      working-directory: scripts
+            
+    - name: Download Model
+      run: az ml model download --name taxi-model-mlops-demo --version 1 --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME_DEV }} --download-path ./model
+            
+    - name: Register Model Prod
+      run: az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
+```
+
+This workflow is configure to trigger the action when you make some changes in the python code inside the **data-science** folder
+
+### Configuring Manual Approvals
+
+For the Test and Prod environment, configure the **Environment protection rules**. Add at least one login in the **Required reviewers**
+
+![image](https://user-images.githubusercontent.com/31459994/192127532-b3b3d4b0-bd43-4775-8558-462c178d9c10.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192127545-48e38124-8f48-41bc-9806-6829a53ff91b.png)
+
+This way, the MLOps process will require a review before moving the model to Test and later to Prod
+<br /><br />
+
+As you submit an Action and a manual approval is required, you will receive an email requesting approval
+<br /><br />
+![image](https://user-images.githubusercontent.com/31459994/192127648-3e14075c-5cbb-4e49-9224-844d780ddf5c.png)
+<br /><br />
+
+Click **review deployments** to approve and release the task
+![image](https://user-images.githubusercontent.com/31459994/192127656-e78cd0b0-08d1-449f-9428-52b7160c8eb7.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192127670-93508cbf-671f-4413-8daa-b0bac6f022dc.png)
+
+<br /><br />
+
+Do the same for Production environment
+
+![image](https://user-images.githubusercontent.com/31459994/192127700-a723e9f4-f3b0-4089-8726-e33a823286d5.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192127713-10bcb3e4-9c64-4981-88f8-41ed173e4837.png)
+
+<br /><br />
+
+WE DID IT!!!
+![image](https://user-images.githubusercontent.com/31459994/192127859-9215acc3-43e1-49ee-b69d-e42dbb1b074c.png)
+
+<br /><br />
+
+***If you've followed all the steps correctly up to this point, you now have your MLOps working and now it's time to improve based on your needs***
 
 ---------------------------------------------------------------------------------------------------------------
 

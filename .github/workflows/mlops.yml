@@ -1,0 +1,87 @@
+on:
+      push:
+            paths:
+                  - 'data-science/**'
+
+permissions:
+      id-token: write
+      contents: read
+
+jobs:
+  Pipeline-Dev:
+    runs-on: ubuntu-latest
+    environment: Dev
+    steps:
+    
+    - name: check out repo
+      uses: actions/checkout@v2
+    
+    - name: login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+
+    - name: Setup Azure ML Cli
+      run: bash setupml.sh
+      working-directory: scripts
+            
+    - name: Execute ML Pipeline
+      run: az ml job create --file ./dev/pipeline.yml --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
+
+  Promote-to-Test:
+    runs-on: ubuntu-latest
+    environment: Test
+    needs: [Pipeline-Dev]
+    steps:
+    
+    - name: check out repo
+      uses: actions/checkout@v2
+    
+    - name: login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+
+    - name: Setup Azure ML Cli
+      run: bash setupml.sh
+      working-directory: scripts
+
+    - name: Download Model
+      run: az ml model download --name taxi-model-mlops-demo --version 1 --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME_DEV }} --download-path ./model
+            
+    - name: Register Model Test
+      run: az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
+
+  Promote-to-Prod:
+    runs-on: ubuntu-latest
+    environment: Prod
+    needs: [Pipeline-Dev,Promote-to-Test]
+    steps:
+    
+    - name: check out repo
+      uses: actions/checkout@v2
+    
+    - name: login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+
+    - name: Setup Azure ML Cli
+      run: bash setupml.sh
+      working-directory: scripts
+            
+    - name: Download Model
+      run: az ml model download --name taxi-model-mlops-demo --version 1 --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME_DEV }} --download-path ./model
+            
+    - name: Register Model Prod
+      run: az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
+
