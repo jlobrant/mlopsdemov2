@@ -1,6 +1,7 @@
 # Setup parameters
-# Please update the sufix before running setup scripts
+# Please update the sufix and subscriptionId before running setup scripts
 $resource_sufix="demo"
+$subscriptionId="0000"
 # Parameters
 $resource_region="eastus2"
 $resource_group_ml="rg-demo-mlops-$($resource_sufix)"
