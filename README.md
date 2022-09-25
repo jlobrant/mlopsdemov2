@@ -1,6 +1,14 @@
-# MLOps Demo Scenario
+# MLOps - Step by step guide
 
 ![image](https://user-images.githubusercontent.com/31459994/189961497-b7516d79-594c-4f92-9234-0770f9586860.png)
+
+This guide was inspired by the Azure MLOPs (v2) solution accelerator, and the objective is to help you understant all steps involved in building the foundation of an end2end MLOPs environment.
+
+Please checkout the MLOPs (v2) solution accelerator repository for more information:
+
+
+[Azure MLOps (v2) solution accelerator](https://github.com/Azure/mlops-v2)
+
 
 # Step by Step guide - Manual Execution (Learning purpose)
 
@@ -17,155 +25,210 @@ If you need any assistance to set this up, check the link below:
 
 [VSCode - Source Control](https://code.visualstudio.com/docs/sourcecontrol/overview)
 
-### Create the resource group you will use in this demo
+### **IMPORTANT!!!** Execute the demo in the root folder of your project
 
-```powershell
-az group create -l eastus2 -n rg-demo-mlops
+Open a New Terminal
+
+![image](https://user-images.githubusercontent.com/31459994/192061495-90f3ac5c-9367-4daa-aad9-a1d91cd12870.png)
+
+Use the root folder for this demo
+
+![image](https://user-images.githubusercontent.com/31459994/192061574-b38230b4-05e8-4ff8-8a58-17a9424bb353.png)
+
+### Authenticate using az login and set the default subscription
+
+```PowerShell
+az login
 ```
 
-### Create 3 AML Workspaces to use in the demo
+Also set the default subscription id
 
-Before executing the az cli commands, please update the workspace names in yml files. The workspaces yml files are stored in the **/workspace** folder.
+```PowerShell
+az account set --subscription "YOUR-SUBSCRIPTION-ID"
+```
 
-![image](https://user-images.githubusercontent.com/31459994/192031844-09031ce6-3c7f-489c-8418-99b7d02a9c71.png)
+### Edit the **env.ps1** file in the **scripts** folder
 
+Update the **$resource_sufix** parameter before setting the environment variables (executing the env.ps1)
+
+![image](https://user-images.githubusercontent.com/31459994/192061284-b67169b3-7778-49e6-9f62-e87a2e9f3a2e.png)
+
+### Execute the PS script to set the environment variables
+
+```PowerShell
+. .\scripts\env.ps1
+```
+
+### Create the ML resource group you will use in this demo
+
+```PowerShell
+az group create -l $resource_region -n $resource_group_ml
+```
+
+### Create the 3 AML Workspaces to use in this demo (Dev, Test and Prod)
 
 01 - Create Dev Workspace
 
-```powershell
-az ml workspace create --file ./workspace/devworkspace.yml --resource-group rg-demo-mlops
+```PowerShell
+az ml workspace create --resource-group $resource_group_ml --name $workspace01 --location $resource_region --display-name "Dev Workspace"
 ```
 
 02 - Create Test Workspace
 
-```powershell
-az ml workspace create --file ./workspace/testworkspace.yml --resource-group rg-demo-mlops
+```PowerShell
+az ml workspace create --resource-group $resource_group_ml --name $workspace02 --location $resource_region --display-name "Test Workspace"
 ```
 
 03 - Create Prod Workspace
 
-```powershell
-az ml workspace create --file ./workspace/prodworkspace.yml --resource-group rg-demo-mlops
+```PowerShell
+az ml workspace create --resource-group $resource_group_ml --name $workspace03 --location $resource_region --display-name "Prod Workspace"
 ```
 
-Example
+You should see this in your RG after this step
 
-![image](https://user-images.githubusercontent.com/31459994/192032047-b2f2fbe5-4f01-496e-b26d-435a505dcb55.png)
+![image](https://user-images.githubusercontent.com/31459994/192062910-e1d306ca-7c1d-41cf-af2c-273a503bd966.png)
 
 
 ### Create a Storage Account
 
-Create the Storage Acc group
+Create the storage account group
 
-```powershell
-az group create -l eastus2 -n rg-demo-storage-mlops
+```PowerShell
+az group create -l $resource_region -n $resource_group_stg
 ```
 
 Create a storage account 
 
-```powershell
-az storage account create --name stgaccmlops2demo --resource-group rg-demo-storage-mlops --location eastus2 --sku Standard_ZRS --kind StorageV2 --enable-hierarchical-namespace true
+```PowerShell
+az storage account create --name $storage_name --resource-group $resource_group_stg --location $resource_region --sku Standard_ZRS --kind StorageV2 --enable-hierarchical-namespace true
 ```
 
-**Important: Storage account names are unique. Make sure to use a different name in this command, also in the next steps involving the storage account**
+**Important: Storage account names are unique. Make sure to use a different sufix in a new demo
 
 ### Create a User Managed Identity
 
-```powershell
-az identity create  -n mlopsuidemo --query id -o tsv -g rg-demo-mlops
+Execute the cmd below. It will store the ID if the managed identity in the $managed_identity_id
+
+```PowerShell
+$managed_identity_id=$(az identity create  -n $managed_identity_mlgroup --query id -o tsv -g $resource_group_ml)
 ```
 
-Save the string and update the yml files in **/compute** folder
-
-![image](https://user-images.githubusercontent.com/31459994/192035873-4d3d75a2-cd6b-4444-99ab-5c3ad10a6896.png)
-
-
-Example:
-
-./compute/computedev.yml:
-
-```
-user_assigned_identities: 
-    - resource_id: "/subscriptions/.../resourcegroups/rg-ml-mlopsworkspaces-jb/providers/Microsoft.ManagedIdentity/userAssignedIdentities/mlopsdemostgacc"
-```
-(using the string result of az identity create cmd)
-
-### Create Compute
+### Create Compute in all AML workspaces
 
 Dev: 
 
-```powershell
-az ml compute create -f ./compute/computedev.yml --workspace-name ml-workspace-demo-s-01 --resource-group rg-demo-mlops
+```PowerShell
+az ml compute create -f ./compute/computedev.yml --workspace-name $workspace01 --resource-group $resource_group_ml --identity-type user_assigned --user-assigned-identities $managed_identity_id
 ```
 
 Test: 
 
-```powershell
-az ml compute create -f ./compute/computetest.yml --workspace-name ml-workspace-demo-s-02 --resource-group rg-demo-mlops
+```PowerShell
+az ml compute create -f ./compute/computetest.yml --workspace-name $workspace02 --resource-group $resource_group_ml --identity-type user_assigned --user-assigned-identities $managed_identity_id
 ```
 
 Prod: 
 
-```powershell
-az ml compute create -f ./compute/computeprod.yml --workspace-name ml-workspace-demo-s-03 --resource-group rg-demo-mlops
+```PowerShell
+az ml compute create -f ./compute/computeprod.yml --workspace-name $workspace03 --resource-group $resource_group_ml --identity-type user_assigned --user-assigned-identities $managed_identity_id
 ```
 
 Grant access on the Storage Account you will use for the demo:
 
-First, check the ID of the identity you created previously:
 
-```powershell
-az identity show --name mlopsuidemo --resource-group rg-demo-mlops --query principalId -o tsv
+```PowerShell
+$storage_acc_id=$(az storage account show --name $storage_name --resource-group $resource_group_stg --query id -o tsv)
+
+$managed_identity_principal_id=$(az identity show --name $managed_identity_mlgroup --resource-group $resource_group_ml --query principalId -o tsv)
+
+az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $managed_identity_principal_id --scope $storage_acc_id
 ```
 
-Get the **principalId** or use the PS below:
+![image](https://user-images.githubusercontent.com/31459994/192065630-f51fd071-0453-4cac-872e-cd70d31eb326.png)
 
-```powershell
-$identity=$(az identity show --name mlopsuidemo --resource-group rg-demo-mlops --query principalId -o tsv)
 
-az role assignment create --role "Storage Blob Data Contributor" --assignee-object-id $identity --scope "/subscriptions/6fab1661-47ae-49ea-ac8d-754881112b55/resourceGroups/rg-demo-storage-mlops/providers/Microsoft.Storage/storageAccounts/stgaccmlops2demo"
+
+Grant access to the AML Workspaces managed identities:
+
+```PowerShell
+$workspace01spID=$(az resource list -n $workspace01 --resource-group $resource_group_ml --query [*].identity.principalId --out tsv)
+$workspace02spID=$(az resource list -n $workspace02 --resource-group $resource_group_ml --query [*].identity.principalId --out tsv)
+$workspace03spID=$(az resource list -n $workspace03 --resource-group $resource_group_ml --query [*].identity.principalId --out tsv)
+
+az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $workspace01spID --scope $storage_acc_id
+az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $workspace02spID --scope $storage_acc_id
+az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $workspace03spID --scope $storage_acc_id
 ```
 
-![image](https://user-images.githubusercontent.com/31459994/192043054-efa6d3c0-f69c-49c5-a126-0c38dd817929.png)
+Also give access to your own id
 
+```PowerShell
+$selfid=$(az ad signed-in-user show --query id -o tsv)
+az role assignment create --role "Storage Blob Data Owner" --assignee-object-id $selfid --scope $storage_acc_id
+```
 
-Also grant access to the AML Workspaces identities:
-
-![image](https://user-images.githubusercontent.com/31459994/190242807-9692a5d5-2246-4fee-83ca-eaab33dcba45.png)
+Storage Access Control screenshot
+![image](https://user-images.githubusercontent.com/31459994/192066302-2f920320-7cd5-4b36-a77b-02c64c6e4a03.png)
 
 
 ### Create the containers in the Storage Account
 
-![image](https://user-images.githubusercontent.com/31459994/189990051-91c17663-d9ad-4fc5-bdd3-ecbf2426b735.png)
+```PowerShell
+az storage container create --name mlopsdemodev --account-name $storage_name --resource-group $resource_group_stg
+az storage container create --name mlopsdemotest --account-name $storage_name --resource-group $resource_group_stg
+az storage container create --name mlopsdemoprod --account-name $storage_name --resource-group $resource_group_stg
+```
 
-Use the following structure in test and prod containers
+![image](https://user-images.githubusercontent.com/31459994/192067816-f7eb4731-a43b-4aa5-90df-966aa484c8a1.png)
 
-![image](https://user-images.githubusercontent.com/31459994/189990148-a45364ef-ec1d-41b6-8f2b-4c58b1ee4a61.png)
+Upload the csv file that will be used in batch deployment to the proper directory
 
+```PowerShell
+az storage azcopy blob upload -c mlopsdemotest --account-name $storage_name -s "data/taxi-batch.csv" -d "taxibatch/taxi-batch.csv"
 
-Upload the file **taxi-batch.csv** to test and prod containers under the **taxibatch** directory. The file is in the **/data** directory
+az storage azcopy blob upload -c mlopsdemotest --account-name $storage_name -s "data/taxi-request.json" -d "taxioutput/taxi-request.json"
+```
 
+![image](https://user-images.githubusercontent.com/31459994/192067983-ebe18c6f-7961-4521-b856-f7b8b1f13aaa.png)
 
-## 1) Dev Steps - Workspace 01 (Dev)
+Repeat for **prod** container
+
+```PowerShell
+az storage azcopy blob upload -c mlopsdemoprod --account-name $storage_name -s "data/taxi-batch.csv" -d "taxibatch/taxi-batch.csv"
+
+az storage azcopy blob upload -c mlopsdemoprod --account-name $storage_name -s "data/taxi-request.json" -d "taxioutput/taxi-request.json"
+```
+
+## 1) Dev Workspace Steps
+
+In this step you will run a job in the Dev workspace and register a model. This model will be later transfered to Test and Prod workspaces in the following steps.
 
 ### Create AML Environment
 
 ```powershell
-az ml environment create --file ./dev/train-env.yml --workspace-name mlopsdemojb01 --resource-group rg-ml-mlopsworkspaces-jb
+az ml environment create --file ./dev/train-env.yml --workspace-name $workspace01 --resource-group $resource_group_ml
 ```
 
 ### Pipeline run
 
 ```powershell
-az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
+az ml job create --file ./dev/pipeline.yml --resource-group $resource_group_ml --workspace-name $workspace01
 ```
 
-## 2) Test Steps - Workspace 02 (Test)
+After this command, a pipeline will be triggered in the Dev workspace. The result of this execution is a model being registered in the Dev workspace.
+
+![image](https://user-images.githubusercontent.com/31459994/192121950-1b336999-be3f-498e-bcb2-b79af391a797.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192122667-03194aec-07ec-421e-90de-2aa66eccec13.png)
+
+
+## 2) Test Workspace Steps
 
 ### Create AML Enviroment
 
 ```powershell
-az ml environment create --file ./test/test-env.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
+az ml environment create --file ./test/test-env.yml --workspace-name $workspace02 --resource-group $resource_group_ml
 ```
 
 ### Create datastore and data asset
@@ -173,51 +236,67 @@ az ml environment create --file ./test/test-env.yml --workspace-name mlopsdemojb
 Datastore
 
 ```powershell
-az ml datastore create --file ./test/data-store.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
+az ml datastore create --file ./test/data-store.yml --workspace-name $workspace02 --resource-group $resource_group_ml --set account_name=$storage_name
 ```
 
 Data Asset
 
 ```powershell
-az ml data create -f ./test/file-data-asset.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
+az ml data create -f ./test/file-data-asset.yml --workspace-name $workspace02 --resource-group $resource_group_ml
 ```
 
 ### Download model from Dev Workspace
 
 ```powershell
-az ml model download --name taxi-model-mlops-demo --version 1 --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01 --download-path ./model
+az ml model download --name taxi-model-mlops-demo --version 1 --resource-group $resource_group_ml --workspace-name $workspace01 --download-path ./model
 ```
 
 ### Register model on Test Workspace
 
 ```powershell
-az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
+az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group $resource_group_ml --workspace-name $workspace02
 ```
 
 ### Register Batch Endpoint
 
 ```powershell
-az ml batch-endpoint create --file ./test/batch-endpoint-test.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
+$endpoint_name_test = "taxifare-b-mldemo-t-$resource_sufix"
+
+az ml batch-endpoint create --file ./test/batch-endpoint-test.yml --resource-group $resource_group_ml --workspace-name $workspace02 --set name=$endpoint_name_test
 ```
 
 ### Register Batch Deployment
 
 ```powershell
-az ml batch-deployment create --file ./test/batch-deployment-test.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
+az ml batch-deployment create --file ./test/batch-deployment-test.yml --resource-group $resource_group_ml --workspace-name $workspace02 --set endpoint_name=$endpoint_name_test
 ```
 
 ### Execute Batch Job
 
 ```powershell
-az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-test --deployment-name batch-dp-mlopsdemo-test  --input-type uri_file --input azureml://datastores/mlopsdemotestcointainer/paths/taxibatch/taxi-batch.csv  --resource-group rg-ml-mlopsworkspaces-jb  --workspace-name mlopsdemojb02 --output-path azureml://datastores/mlopsdemotestcointainer/paths/taxioutput
+az ml batch-endpoint invoke --name $endpoint_name_test --deployment-name batch-dp-mlopsdemo-test  --input-type uri_file --input azureml://datastores/mlopsdemotestcointainer/paths/taxibatch/taxi-batch.csv --resource-group $resource_group_ml --workspace-name $workspace02 --output-path azureml://datastores/mlopsdemotestcointainer/paths/taxioutput
 ```
+
+This command will invoke a job, that will use the deployed model in the test workspace, and generate the results from the data in the **taxi-batch.csv** in the **taxioutput** folder in the test container
+
+![image](https://user-images.githubusercontent.com/31459994/192123162-04e811f2-b363-471f-8f90-3d2f993df122.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192123493-2b161819-9f4d-452c-be5c-b9f331b797c2.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192123516-afcbe6a0-b668-4b18-908a-cdfbded43d3d.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192123532-1f4de0bb-f452-410d-aa47-edb336fc4f98.png)
+
+
+Now you can verify the results and analyze the performance of the model using shadow production data.
+
 
 ## 3) Prod Steps - Workspace 03 (Prod)
 
 ### Create Environment
 
 ```powershell
-az ml environment create --file ./prod/prod-env.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
+az ml environment create --file ./prod/prod-env.yml --workspace-name $workspace03 --resource-group $resource_group_ml
 ```
 
 ### Create datastore and data asset
@@ -225,74 +304,54 @@ az ml environment create --file ./prod/prod-env.yml --workspace-name mlopsdemojb
 Datastore
 
 ```powershell
-az ml datastore create --file ./prod/data-store.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
+az ml datastore create --file ./prod/data-store.yml --workspace-name $workspace03 --resource-group $resource_group_ml --set account_name=$storage_name
 ```
 
 Data Asset
 
 ```powershell
-az ml data create -f ./prod/file-data-asset.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
+az ml data create -f ./prod/file-data-asset.yml --workspace-name $workspace03 --resource-group $resource_group_ml
 ```
 
 ### Download model from Dev Workspace
 
-Already done in Test step
+Already done in Test step.
 
 ### Register Model
 
 ```powershell
-az ml model create --name taxi-prod-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
+az ml model create --name taxi-prod-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group $resource_group_ml --workspace-name $workspace03
 ```
 
 ### Register Batch Endpoint
 
 ```powershell
-az ml batch-endpoint create --file ./prod/batch-endpoint-prod.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
+$endpoint_name_prod = "taxifare-b-mldemo-p-$resource_sufix"
+
+az ml batch-endpoint create --file ./prod/batch-endpoint-prod.yml --resource-group $resource_group_ml --workspace-name $workspace03 --set name=$endpoint_name_prod
 ```
 
 ### Register Batch Deployment
 
 ```powershell
-az ml batch-deployment create --file ./prod/batch-deployment-prod.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
+az ml batch-deployment create --file ./prod/batch-deployment-prod.yml --resource-group $resource_group_ml --workspace-name $workspace03 --set endpoint_name=$endpoint_name_prod
 ```
 
 ### Execute Batch Job
 
 ```powershell
-az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-name batch-dp-mlopsdemo-prod --input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03 --output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
+az ml batch-endpoint invoke --name $endpoint_name_prod --deployment-name batch-dp-mlopsdemo-prod --input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv --resource-group $resource_group_ml --workspace-name $workspace03 --output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
 ```
+<br /><br />
+**We expect to get the same results in the Test Workspace and Production Workspace in this demo, but the idea is that the file in the prod container is the actual production data, as the file in the test container is shadow production data, which means some actual data that was selected to test the model**
 
-## Demo Outcomes
+<br /><br />
+**The Development, Test and Production environment in a real use case will be used with different datasets**
 
-### Dev Workspace
-
-![image](https://user-images.githubusercontent.com/31459994/189990789-c095bd4a-4a98-42cf-a2c1-85ed2fab1bdb.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189990983-93d28187-3b56-49b6-996e-f7379574b29e.png)
-
-### Test Workspace
-
-![image](https://user-images.githubusercontent.com/31459994/189991064-b49fc8c0-426e-47e3-9b4f-dfcb2bd368b6.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991354-0ba0ba7f-143a-4c74-bdd7-9012af47a063.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991391-595b1af4-b468-40e9-8142-84f7d9459508.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991441-7841d995-7bc5-45e4-86c8-3db743b5e8b2.png)
-
-### Prod Workspace
-
-![image](https://user-images.githubusercontent.com/31459994/189991518-146b149c-6822-4710-9c3d-7818752d9bb7.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991642-ba508cfc-3fa5-4c86-9ca7-8d9a1b9cb150.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991684-ac0a69e2-8c83-4296-b2ad-dbc8ab08bf4d.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991726-34e220fa-7040-4687-8603-23f58c4523ba.png)
 
 ---------------------------------------------------------------------------------------------------------------
 
-# GitHub Actions
+# GitHub Actions (in development)
 
 ## Dev Actions
 
