@@ -45,7 +45,7 @@ az login
 
 Update the **$resource_sufix** parameter and **$subscriptionId** before setting the environment variables (executing the env.ps1)
 
-![image](https://user-images.githubusercontent.com/31459994/192061284-b67169b3-7778-49e6-9f62-e87a2e9f3a2e.png)
+![image](https://user-images.githubusercontent.com/31459994/192129117-b06224db-2839-4f4c-8961-18a3ae08e77b.png)
 
 ### Execute the PS script to set the environment variables
 
