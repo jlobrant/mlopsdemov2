@@ -218,6 +218,8 @@ After this command, a pipeline will be triggered in the Dev workspace. The resul
 
 ![image](https://user-images.githubusercontent.com/31459994/192121950-1b336999-be3f-498e-bcb2-b79af391a797.png)
 
+![image](https://user-images.githubusercontent.com/31459994/192122667-03194aec-07ec-421e-90de-2aa66eccec13.png)
+
 
 ## 2) Test Workspace Steps
 
@@ -232,31 +234,33 @@ az ml environment create --file ./test/test-env.yml --workspace-name $workspace0
 Datastore
 
 ```powershell
-az ml datastore create --file ./test/data-store.yml --workspace-name $workspace02 --resource-group $resource_group_ml
+az ml datastore create --file ./test/data-store.yml --workspace-name $workspace02 --resource-group $resource_group_ml --set account_name=$storage_name
 ```
 
 Data Asset
 
 ```powershell
-az ml data create -f ./test/file-data-asset.yml --workspace-name mlopsdemojb02 --resource-group rg-ml-mlopsworkspaces-jb
+az ml data create -f ./test/file-data-asset.yml --workspace-name $workspace02 --resource-group $resource_group_ml
 ```
 
 ### Download model from Dev Workspace
 
 ```powershell
-az ml model download --name taxi-model-mlops-demo --version 1 --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01 --download-path ./model
+az ml model download --name taxi-model-mlops-demo --version 1 --resource-group $resource_group_ml --workspace-name $workspace01 --download-path ./model
 ```
 
 ### Register model on Test Workspace
 
 ```powershell
-az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
+az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group $resource_group_ml --workspace-name $workspace02
 ```
 
 ### Register Batch Endpoint
 
 ```powershell
-az ml batch-endpoint create --file ./test/batch-endpoint-test.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
+$endpoint_name_test = "taxifare-b-mldemo-t-$resource_sufix"
+
+az ml batch-endpoint create --file ./test/batch-endpoint-test.yml --resource-group $resource_group_ml --workspace-name $workspace02 --set name=$endpoint_name_test
 ```
 
 ### Register Batch Deployment
