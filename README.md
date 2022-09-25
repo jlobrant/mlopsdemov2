@@ -357,6 +357,10 @@ az ml batch-endpoint invoke --name $endpoint_name_prod --deployment-name batch-d
 
 ### Create application and service principal
 
+You'll need to create an Azure Active Directory application and service principal and then assign a role on your subscription to your application so that your workflow has access to your subscription
+
+You will create one Service Principal per environment
+
 ```powershell
 $githubapp_dev="gitAppdev$resource_sufix"
 $githubapp_test="gitApptest$resource_sufix"
@@ -371,6 +375,24 @@ $githubapp_dev_oid=$(az ad app list --display-name $githubapp_dev --query [*].id
 az ad sp create --id $githubapp_dev_cid
 
 $githubapp_dev_assigneeid=$(az ad sp show --id $githubapp_dev_cid --query id -o tsv)
+az role assignment create --role contributor --subscription $subscriptionId --assignee-object-id  $githubapp_dev_assigneeid --assignee-principal-type ServicePrincipal --scope /subscriptions/$subscriptionId/resourceGroups/$resource_group_ml
+
+$githubapp_test_cid=$(az ad app list --display-name $githubapp_test --query [*].appId -o tsv)
+$githubapp_test_oid=$(az ad app list --display-name $githubapp_test --query [*].id -o tsv)
+az ad sp create --id $githubapp_test_cid
+
+$githubapp_test_assigneeid=$(az ad sp show --id $githubapp_test_cid --query id -o tsv)
+az role assignment create --role contributor --subscription $subscriptionId --assignee-object-id  $githubapp_test_assigneeid --assignee-principal-type ServicePrincipal --scope /subscriptions/$subscriptionId/resourceGroups/$resource_group_ml
+
+
+$githubapp_prod_cid=$(az ad app list --display-name $githubapp_prod --query [*].appId -o tsv)
+$githubapp_prod_oid=$(az ad app list --display-name $githubapp_prod --query [*].id -o tsv)
+az ad sp create --id $githubapp_prod_cid
+
+$githubapp_prod_assigneeid=$(az ad sp show --id $githubapp_prod_cid --query id -o tsv)
+az role assignment create --role contributor --subscription $subscriptionId --assignee-object-id  $githubapp_prod_assigneeid --assignee-principal-type ServicePrincipal --scope /subscriptions/$subscriptionId/resourceGroups/$resource_group_ml
+
+
 ```
 
 ## Dev Actions
