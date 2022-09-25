@@ -30,6 +30,6 @@ jobs:
       working-directory: scripts
             
     - name: Execute ML Pipeline
-      run: az ml job create --file ./dev/pipeline.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb01
+      run: az ml job create --file ./dev/pipeline.yml --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
 
       
