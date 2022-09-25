@@ -131,7 +131,7 @@ def main():
 
     # append regressor to preprocessing pipeline.
     # now we have a full prediction pipeline.
-    
+    # Test Workflow
     #model = Pipeline(steps=[('preprocessor', preprocessor),
     #                      ('regressor', RandomForestRegressor(
     #                          n_estimators = args.regressor__n_estimators,
