@@ -392,8 +392,45 @@ az ad sp create --id $githubapp_prod_cid
 $githubapp_prod_assigneeid=$(az ad sp show --id $githubapp_prod_cid --query id -o tsv)
 az role assignment create --role contributor --subscription $subscriptionId --assignee-object-id  $githubapp_prod_assigneeid --assignee-principal-type ServicePrincipal --scope /subscriptions/$subscriptionId/resourceGroups/$resource_group_ml
 
-
 ```
+
+Set your GitHub name as an environment variable, and also the repository name
+
+Replace with yout GitHub account
+
+```powershell
+$github_org="jlobrant"
+$github_repo="mlopsdemov2"
+```
+
+Configure the GitHub connection
+
+```powershell
+$devgraphuri="https://graph.microsoft.com/beta/applications/$githubapp_dev_oid/federatedIdentityCredentials"
+$devgraphbody="{'name':'GitHubDevDeploy','issuer':'https://token.actions.githubusercontent.com','subject':'repo:$github_org/${github_repo}:environment:Dev','description':'Development Environment','audiences':['api://AzureADTokenExchange']}"
+
+az rest --method POST --uri $devgraphuri --body $devgraphbody
+```
+
+After this step, you will see the credential configured as the screenshot below
+![image](https://user-images.githubusercontent.com/31459994/192126260-6bba566c-9abf-45f4-94f7-e45682212dca.png)
+
+Repeat this step for the Test and Prod Apps
+
+```powershell
+$testgraphuri="https://graph.microsoft.com/beta/applications/$githubapp_test_oid/federatedIdentityCredentials"
+$testgraphbody="{'name':'GitHubTestDeploy','issuer':'https://token.actions.githubusercontent.com','subject':'repo:$github_org/${github_repo}:environment:Test','description':'Test Environment','audiences':['api://AzureADTokenExchange']}"
+
+az rest --method POST --uri $testgraphuri --body $testgraphbody
+```
+
+```powershell
+$prodgraphuri="https://graph.microsoft.com/beta/applications/$githubapp_prod_oid/federatedIdentityCredentials"
+$prodgraphbody="{'name':'GitHubProdDeploy','issuer':'https://token.actions.githubusercontent.com','subject':'repo:$github_org/${github_repo}:environment:Prod','description':'Prod Environment','audiences':['api://AzureADTokenExchange']}"
+
+az rest --method POST --uri $prodgraphuri --body $prodgraphbody
+```
+
 
 ## Dev Actions
 
