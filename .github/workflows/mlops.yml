@@ -52,10 +52,13 @@ jobs:
     - name: Setup Azure ML Cli
       run: bash setupml.sh
       working-directory: scripts
+
+    - name: Download Model
+      run: az ml model download --name taxi-model-mlops-demo --version 1 --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME_DEV }} --download-path ./model
             
-    - name: Register Model
-      run: az group list
-      
+    - name: Register Model Test
+      run: az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
+
   Promote-to-Prod:
     runs-on: ubuntu-latest
     environment: Prod
@@ -77,5 +80,9 @@ jobs:
       run: bash setupml.sh
       working-directory: scripts
             
-    - name: Register Model
-      run: az group list
+    - name: Download Model
+      run: az ml model download --name taxi-model-mlops-demo --version 1 --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME_DEV }} --download-path ./model
+            
+    - name: Register Model Prod
+      run: az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
+
