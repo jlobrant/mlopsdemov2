@@ -90,6 +90,6 @@ jobs:
     inputs:
       model_name: "taxi-model-mlops-demo"
       model_path: ${{parent.jobs.train_model.outputs.model_output}}
-      deploy_flag: 1
+      deploy_flag: ${{parent.jobs.evaluate_model.outputs.deploy_flag}}
 
 # </jobs>
