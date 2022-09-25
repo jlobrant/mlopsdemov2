@@ -58,7 +58,7 @@ jobs:
       
   Promote-to-Prod:
     runs-on: ubuntu-latest
-    environment: Test
+    environment: Prod
     needs: [Pipeline-Dev,Promote-to-Test]
     steps:
     
