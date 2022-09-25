@@ -460,19 +460,31 @@ For the Test and Prod environment, configure the **Environment protection rules*
 ![image](https://user-images.githubusercontent.com/31459994/192127545-48e38124-8f48-41bc-9806-6829a53ff91b.png)
 
 This way, the MLOps process will require a review before moving the model to Test and later to Prod
+<br /><br />
 
-
+As you submit an Action and an approval is required, you will receive an email asking for approval
+<br /><br />
 ![image](https://user-images.githubusercontent.com/31459994/192127648-3e14075c-5cbb-4e49-9224-844d780ddf5c.png)
+<br /><br />
 
+Click **review deployments** to approve and release the task
 ![image](https://user-images.githubusercontent.com/31459994/192127656-e78cd0b0-08d1-449f-9428-52b7160c8eb7.png)
 
 ![image](https://user-images.githubusercontent.com/31459994/192127670-93508cbf-671f-4413-8daa-b0bac6f022dc.png)
 
 ![image](https://user-images.githubusercontent.com/31459994/192127700-a723e9f4-f3b0-4089-8726-e33a823286d5.png)
 
+<br /><br />
+
+Do the same for Production environment
+
 ![image](https://user-images.githubusercontent.com/31459994/192127713-10bcb3e4-9c64-4981-88f8-41ed173e4837.png)
 
+![image](https://user-images.githubusercontent.com/31459994/192127859-9215acc3-43e1-49ee-b69d-e42dbb1b074c.png)
 
+<br /><br />
+
+**If you've followed all the steps correctly up to this point, you now have your MLOps working and now it's time to improve based on your needs**
 
 ---------------------------------------------------------------------------------------------------------------
 
