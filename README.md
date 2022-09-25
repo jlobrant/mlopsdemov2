@@ -2,9 +2,9 @@
 
 ![image](https://user-images.githubusercontent.com/31459994/192124518-f043cf1a-1626-4c40-823e-f8683cc80b55.png)
 
-This guide was inspired by the Azure MLOPs (v2) solution accelerator, and the objective is to help you understant all steps involved in building the foundation of an end2end MLOPs environment.
+This guide was inspired by the Azure MLOPs (v2) solution accelerator, and the goal is to help you understand all the steps involved in building the foundation of an end2end MLOPs environment.
 
-Please checkout the MLOPs (v2) solution accelerator repository for more information:
+Check the MLOPs Solution Accelerator (v2) repository for more information:
 
 
 [Azure MLOps (v2) solution accelerator](https://github.com/Azure/mlops-v2)
@@ -21,7 +21,7 @@ Please checkout the MLOPs (v2) solution accelerator repository for more informat
 ![image](https://user-images.githubusercontent.com/31459994/192029880-f2310bd5-cbab-452e-89b0-d6fdf6a281be.png)
 
 
-If you need any assistance to set this up, check the link below:
+If you need help setting this up, check the link below:
 
 [VSCode - Source Control](https://code.visualstudio.com/docs/sourcecontrol/overview)
 
@@ -41,15 +41,9 @@ Use the root folder for this demo
 az login
 ```
 
-Also set the default subscription id
-
-```PowerShell
-az account set --subscription "YOUR-SUBSCRIPTION-ID"
-```
-
 ### Edit the **env.ps1** file in the **scripts** folder
 
-Update the **$resource_sufix** parameter before setting the environment variables (executing the env.ps1)
+Update the **$resource_sufix** parameter and **$subscriptionId** before setting the environment variables (executing the env.ps1)
 
 ![image](https://user-images.githubusercontent.com/31459994/192061284-b67169b3-7778-49e6-9f62-e87a2e9f3a2e.png)
 
@@ -57,6 +51,12 @@ Update the **$resource_sufix** parameter before setting the environment variable
 
 ```PowerShell
 . .\scripts\env.ps1
+```
+
+Set the default subscription id
+
+```PowerShell
+az account set --subscription $subscriptionId
 ```
 
 ### Create the ML resource group you will use in this demo
@@ -104,7 +104,7 @@ Create a storage account
 az storage account create --name $storage_name --resource-group $resource_group_stg --location $resource_region --sku Standard_ZRS --kind StorageV2 --enable-hierarchical-namespace true
 ```
 
-**Important: Storage account names are unique. Make sure to use a different sufix in a new demo
+***Important: Storage account names are unique. Make sure to use a different sufix in a new demo***
 
 ### Create a User Managed Identity
 
@@ -351,7 +351,7 @@ az ml batch-endpoint invoke --name $endpoint_name_prod --deployment-name batch-d
 
 ---------------------------------------------------------------------------------------------------------------
 
-# GitHub Actions (in development)
+# GitHub Actions
 
 ## Setup GitHub Authentication
 
