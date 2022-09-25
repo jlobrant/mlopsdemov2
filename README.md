@@ -455,13 +455,110 @@ Also, create a resource group secret and a workspace secret with the RG name and
 
 In Dev, use the value of the variable $workspace01, in Test $workspace02 and Prod $workspace03
 
-**IMPORTANT: Also create a WORKSPACE_NAME_DEV secret in Test and Prod, as you will need this to donwload the model from Dev to Register in the proper environment**
+***IMPORTANT: Also create a WORKSPACE_NAME_DEV secret in Test and Prod, as you will need this to donwload the model from Dev to Register in the proper environment***
 
 ![image](https://user-images.githubusercontent.com/31459994/192128261-59e0aded-bf83-4625-bde2-4ce11d2ef71b.png)
 
 Use the value from parameter $workspace01
 
 <br /><br />
+
+### Workflow Sample
+
+The following workflow sample is configured in this repository. This example will run a pipeline in Dev workspace, download the model and register the model in Test and Prod environment. You can improve this by adding other actions like invoking the endpoints and evaluating the results of the batch invoke
+
+```YAML
+on:
+      push:
+            paths:
+                  - 'data-science/**'
+
+permissions:
+      id-token: write
+      contents: read
+
+jobs:
+  Pipeline-Dev:
+    runs-on: ubuntu-latest
+    environment: Dev
+    steps:
+    
+    - name: check out repo
+      uses: actions/checkout@v2
+    
+    - name: login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+
+    - name: Setup Azure ML Cli
+      run: bash setupml.sh
+      working-directory: scripts
+            
+    - name: Execute ML Pipeline
+      run: az ml job create --file ./dev/pipeline.yml --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
+
+  Promote-to-Test:
+    runs-on: ubuntu-latest
+    environment: Test
+    needs: [Pipeline-Dev]
+    steps:
+    
+    - name: check out repo
+      uses: actions/checkout@v2
+    
+    - name: login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+
+    - name: Setup Azure ML Cli
+      run: bash setupml.sh
+      working-directory: scripts
+
+    - name: Download Model
+      run: az ml model download --name taxi-model-mlops-demo --version 1 --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME_DEV }} --download-path ./model
+            
+    - name: Register Model Test
+      run: az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
+
+  Promote-to-Prod:
+    runs-on: ubuntu-latest
+    environment: Prod
+    needs: [Pipeline-Dev,Promote-to-Test]
+    steps:
+    
+    - name: check out repo
+      uses: actions/checkout@v2
+    
+    - name: login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+
+    - name: Setup Azure ML Cli
+      run: bash setupml.sh
+      working-directory: scripts
+            
+    - name: Download Model
+      run: az ml model download --name taxi-model-mlops-demo --version 1 --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME_DEV }} --download-path ./model
+            
+    - name: Register Model Prod
+      run: az ml model create --name taxi-test-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
+```
+
+This workflow is configure to trigger the action when you make some changes in the python code inside the **data-science** folder
+
+### Configuring Manual Approvals
 
 For the Test and Prod environment, configure the **Environment protection rules**. Add at least one login in the **Required reviewers**
 
@@ -497,7 +594,7 @@ WE DID IT!!!
 
 <br /><br />
 
-**If you've followed all the steps correctly up to this point, you now have your MLOps working and now it's time to improve based on your needs**
+***If you've followed all the steps correctly up to this point, you now have your MLOps working and now it's time to improve based on your needs***
 
 ---------------------------------------------------------------------------------------------------------------
 
