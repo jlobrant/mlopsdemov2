@@ -1,6 +1,6 @@
 # MLOps - Step by step guide
 
-![image](https://user-images.githubusercontent.com/31459994/189961497-b7516d79-594c-4f92-9234-0770f9586860.png)
+![image](https://user-images.githubusercontent.com/31459994/192124518-f043cf1a-1626-4c40-823e-f8683cc80b55.png)
 
 This guide was inspired by the Azure MLOPs (v2) solution accelerator, and the objective is to help you understant all steps involved in building the foundation of an end2end MLOPs environment.
 
