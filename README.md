@@ -451,6 +451,13 @@ Also, create a resource group secret and a workspace secret with the RG name and
 
 In Dev, use the value of the variable $workspace01, in Test $workspace02 and Prod $workspace03
 
+For the Test and Prod environment, configure the **Environment protection rules**. Add at least one login in the **Required reviewers**
+
+![image](https://user-images.githubusercontent.com/31459994/192127532-b3b3d4b0-bd43-4775-8558-462c178d9c10.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192127545-48e38124-8f48-41bc-9806-6829a53ff91b.png)
+
+This way, the MLOps process will require a review before moving the model to Test and later to Prod
 
 
 
