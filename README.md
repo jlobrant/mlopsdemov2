@@ -569,7 +569,7 @@ For the Test and Prod environment, configure the **Environment protection rules*
 This way, the MLOps process will require a review before moving the model to Test and later to Prod
 <br /><br />
 
-As you submit an Action and an approval is required, you will receive an email asking for approval
+As you submit an Action and a manual approval is required, you will receive an email requesting approval
 <br /><br />
 ![image](https://user-images.githubusercontent.com/31459994/192127648-3e14075c-5cbb-4e49-9224-844d780ddf5c.png)
 <br /><br />
