@@ -431,6 +431,8 @@ $prodgraphbody="{'name':'GitHubProdDeploy','issuer':'https://token.actions.githu
 az rest --method POST --uri $prodgraphuri --body $prodgraphbody
 ```
 
+## Configure your GitHub
+
 ### Create the Environments in your GitHub repository
 
 This step will be necessary to allow you build an end2end Actions workflow
@@ -460,12 +462,15 @@ For the Test and Prod environment, configure the **Environment protection rules*
 This way, the MLOps process will require a review before moving the model to Test and later to Prod
 
 
+![image](https://user-images.githubusercontent.com/31459994/192127648-3e14075c-5cbb-4e49-9224-844d780ddf5c.png)
 
-## Dev Actions
+![image](https://user-images.githubusercontent.com/31459994/192127656-e78cd0b0-08d1-449f-9428-52b7160c8eb7.png)
 
-Please check the Actions section in this repository:
+![image](https://user-images.githubusercontent.com/31459994/192127670-93508cbf-671f-4413-8daa-b0bac6f022dc.png)
 
-![image](https://user-images.githubusercontent.com/31459994/192027244-cd908da0-5969-4aff-a6d3-7a756da3dfc1.png)
+![image](https://user-images.githubusercontent.com/31459994/192127700-a723e9f4-f3b0-4089-8726-e33a823286d5.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192127713-10bcb3e4-9c64-4981-88f8-41ed173e4837.png)
 
 
 
