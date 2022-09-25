@@ -431,6 +431,28 @@ $prodgraphbody="{'name':'GitHubProdDeploy','issuer':'https://token.actions.githu
 az rest --method POST --uri $prodgraphuri --body $prodgraphbody
 ```
 
+### Create the Environments in your GitHub repository
+
+This step will be necessary to allow you build an end2end Actions workflow
+
+![image](https://user-images.githubusercontent.com/31459994/192126516-4678deb0-8aa3-4332-8585-e8b5a6729fe4.png)
+
+Under Environment secrets, create secrets for **AZURE_CLIENT_ID**, **AZURE_TENANT_ID**, and **AZURE_SUBSCRIPTION_ID**
+
+![image](https://user-images.githubusercontent.com/31459994/192126618-ebab502b-49d9-4704-92bf-76f057367701.png)
+
+Get the values in App Resgistrations on Azure Portal. Also get your Subscription ID value
+
+![image](https://user-images.githubusercontent.com/31459994/192126658-47cbe81c-43b6-4926-a4a0-fc201b8620cc.png)
+
+Also, create a resource group secret and a workspace secret with the RG name and the workspace of the environment (example: Dev, Test and Prod according to the workspaces name)
+
+![image](https://user-images.githubusercontent.com/31459994/192126779-cba3aea1-f592-488b-917c-5fcbb1d29428.png)
+
+In Dev, use the value of the variable $workspace01, in Test $workspace02 and Prod $workspace03
+
+
+
 
 ## Dev Actions
 
