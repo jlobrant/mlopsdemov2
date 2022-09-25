@@ -9,9 +9,9 @@ permissions:
       contents: read
 
 jobs:
-  deployment:
+  pipeline-dev:
     runs-on: ubuntu-latest
-    environment: demo
+    environment: Dev
     steps:
     
     - name: check out repo
@@ -32,4 +32,26 @@ jobs:
     - name: Execute ML Pipeline
       run: az ml job create --file ./dev/pipeline.yml --resource-group ${{ secrets.RESOURCE_GROUP }} --workspace-name ${{ secrets.WORKSPACE_NAME }}
 
-      
+  Promote-to-test:
+    runs-on: ubuntu-latest
+    environment: Test
+    needs: pipeline-dev
+    steps:
+    
+    - name: check out repo
+      uses: actions/checkout@v2
+    
+    - name: login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+
+    - name: Setup Azure ML Cli
+      run: bash setupml.sh
+      working-directory: scripts
+            
+    - name: Register Model
+      run: az group list
