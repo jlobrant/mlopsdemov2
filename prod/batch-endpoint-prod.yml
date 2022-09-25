@@ -1,4 +1,4 @@
 $schema: https://azuremlschemas.azureedge.net/latest/batchEndpoint.schema.json
-name: taxi-fare-batch-mlopsdemo-prod
+name: $(endpoint_name_prod) ## This parameter is a dummy parameter. It will be replaced at runtime with --set
 description: taxi cost batch endpoint
 auth_mode: aad_token

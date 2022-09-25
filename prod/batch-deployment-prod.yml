@@ -1,6 +1,6 @@
 $schema: https://azuremlschemas.azureedge.net/latest/batchDeployment.schema.json
 name: batch-dp-mlopsdemo-prod
-endpoint_name: taxi-fare-batch-mlopsdemo-prod
+endpoint_name: $(endpoint_name_prod) ## This parameter is a dummy parameter. It will be replaced at runtime with --set
 model: azureml:taxi-prod-model-mlops-demo@latest
 compute: azureml:mlopsdemo-cluster-prod
 resources:

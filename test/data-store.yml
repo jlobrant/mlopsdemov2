@@ -1,7 +1,6 @@
-# my_blob_datastore.yml
 $schema: https://azuremlschemas.azureedge.net/latest/azureBlob.schema.json
-name: mlopsdemotestcointainer # add name of your datastore here
+name: mlopsdemotestcointainer
 type: azure_blob
-description: Teste container # add a description of your datastore here
-account_name: developmentjbdemo # add storage account name here
-container_name: mlopsdemotest # add storage container name here
+description: Test container
+account_name: $(storage_name) ## This parameter is a dummy parameter. It will be replaced at runtime with --set
+container_name: mlopsdemotest
