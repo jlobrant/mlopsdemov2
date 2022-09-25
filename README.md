@@ -412,7 +412,7 @@ $devgraphbody="{'name':'GitHubDevDeploy','issuer':'https://token.actions.githubu
 az rest --method POST --uri $devgraphuri --body $devgraphbody
 ```
 
-After this step, you will see the credential configured as the screenshot below
+After this step, you will see the credential configured on Azure Portal, under App Registrations. Select the Service Principal your have just created and select certificates & secretes in the left menu as the screenshot below:
 ![image](https://user-images.githubusercontent.com/31459994/192126260-6bba566c-9abf-45f4-94f7-e45682212dca.png)
 
 Repeat this step for the Test and Prod Apps
