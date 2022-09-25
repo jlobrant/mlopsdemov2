@@ -281,6 +281,12 @@ This command will invoke a job, that will use the deployed model in the test wor
 
 ![image](https://user-images.githubusercontent.com/31459994/192123162-04e811f2-b363-471f-8f90-3d2f993df122.png)
 
+![image](https://user-images.githubusercontent.com/31459994/192123493-2b161819-9f4d-452c-be5c-b9f331b797c2.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192123516-afcbe6a0-b668-4b18-908a-cdfbded43d3d.png)
+
+![image](https://user-images.githubusercontent.com/31459994/192123532-1f4de0bb-f452-410d-aa47-edb336fc4f98.png)
+
 
 
 ## 3) Prod Steps - Workspace 03 (Prod)
