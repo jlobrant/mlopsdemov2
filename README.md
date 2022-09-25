@@ -598,6 +598,8 @@ WE DID IT!!!
 
 ---------------------------------------------------------------------------------------------------------------
 
+# Coming Soon
+
 ## Feathr Feature Store
 
 ![image](https://user-images.githubusercontent.com/31459994/191637601-c0ebff42-0504-422d-960d-db39b2b3a17f.png)
