@@ -472,14 +472,17 @@ Click **review deployments** to approve and release the task
 
 ![image](https://user-images.githubusercontent.com/31459994/192127670-93508cbf-671f-4413-8daa-b0bac6f022dc.png)
 
-![image](https://user-images.githubusercontent.com/31459994/192127700-a723e9f4-f3b0-4089-8726-e33a823286d5.png)
-
 <br /><br />
 
 Do the same for Production environment
 
+![image](https://user-images.githubusercontent.com/31459994/192127700-a723e9f4-f3b0-4089-8726-e33a823286d5.png)
+
 ![image](https://user-images.githubusercontent.com/31459994/192127713-10bcb3e4-9c64-4981-88f8-41ed173e4837.png)
 
+<br /><br />
+
+WE DID IT!!!
 ![image](https://user-images.githubusercontent.com/31459994/192127859-9215acc3-43e1-49ee-b69d-e42dbb1b074c.png)
 
 <br /><br />
