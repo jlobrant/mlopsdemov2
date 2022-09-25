@@ -353,6 +353,26 @@ az ml batch-endpoint invoke --name $endpoint_name_prod --deployment-name batch-d
 
 # GitHub Actions (in development)
 
+## Setup GitHub Authentication
+
+### Create application and service principal
+
+```powershell
+$githubapp_dev="gitAppdev$resource_sufix"
+$githubapp_test="gitApptest$resource_sufix"
+$githubapp_prod="gitAppprod$resource_sufix"
+
+az ad app create --display-name $githubapp_dev
+az ad app create --display-name $githubapp_test
+az ad app create --display-name $githubapp_prod
+
+$githubapp_dev_cid=$(az ad app list --display-name $githubapp_dev --query [*].appId -o tsv)
+$githubapp_dev_oid=$(az ad app list --display-name $githubapp_dev --query [*].id -o tsv)
+az ad sp create --id $githubapp_dev_cid
+
+$githubapp_dev_assigneeid=$(az ad sp show --id $githubapp_dev_cid --query id -o tsv)
+```
+
 ## Dev Actions
 
 Please check the Actions section in this repository:
