@@ -288,6 +288,8 @@ This command will invoke a job, that will use the deployed model in the test wor
 ![image](https://user-images.githubusercontent.com/31459994/192123532-1f4de0bb-f452-410d-aa47-edb336fc4f98.png)
 
 
+Now you can verify the results and analyze the performance of the model using shadow production data.
+
 
 ## 3) Prod Steps - Workspace 03 (Prod)
 
@@ -340,6 +342,11 @@ az ml batch-deployment create --file ./prod/batch-deployment-prod.yml --resource
 ```powershell
 az ml batch-endpoint invoke --name $endpoint_name_prod --deployment-name batch-dp-mlopsdemo-prod --input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv --resource-group $resource_group_ml --workspace-name $workspace03 --output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
 ```
+
+We expect to get the same results in the Test Workspace and Production Workspace in this demo, but the idea is that the file in the prod container is the actual production data, as the file in the test container is shadow production data, which means some actual data that was selected to test the model.
+
+The Development, Test and Production environment in a real use case will be used with different datasets.
+
 
 ---------------------------------------------------------------------------------------------------------------
 
