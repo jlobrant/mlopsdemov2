@@ -343,10 +343,10 @@ az ml batch-deployment create --file ./prod/batch-deployment-prod.yml --resource
 az ml batch-endpoint invoke --name $endpoint_name_prod --deployment-name batch-dp-mlopsdemo-prod --input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv --resource-group $resource_group_ml --workspace-name $workspace03 --output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
 ```
 <br /><br />
-## **We expect to get the same results in the Test Workspace and Production Workspace in this demo, but the idea is that the file in the prod container is the actual production data, as the file in the test container is shadow production data, which means some actual data that was selected to test the model**
+**We expect to get the same results in the Test Workspace and Production Workspace in this demo, but the idea is that the file in the prod container is the actual production data, as the file in the test container is shadow production data, which means some actual data that was selected to test the model**
 
 <br /><br />
-## **The Development, Test and Production environment in a real use case will be used with different datasets**
+**The Development, Test and Production environment in a real use case will be used with different datasets**
 
 
 ---------------------------------------------------------------------------------------------------------------
