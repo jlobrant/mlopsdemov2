@@ -202,6 +202,8 @@ az storage azcopy blob upload -c mlopsdemoprod --account-name $storage_name -s "
 
 ## 1) Dev Workspace Steps
 
+In this step you will run a job in the Dev workspace and register a model. This model will be later transfered to Test and Prod workspaces in the following steps.
+
 ### Create AML Environment
 
 ```powershell
@@ -266,21 +268,27 @@ az ml batch-endpoint create --file ./test/batch-endpoint-test.yml --resource-gro
 ### Register Batch Deployment
 
 ```powershell
-az ml batch-deployment create --file ./test/batch-deployment-test.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb02
+az ml batch-deployment create --file ./test/batch-deployment-test.yml --resource-group $resource_group_ml --workspace-name $workspace02 --set endpoint_name=$endpoint_name_test
 ```
 
 ### Execute Batch Job
 
 ```powershell
-az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-test --deployment-name batch-dp-mlopsdemo-test  --input-type uri_file --input azureml://datastores/mlopsdemotestcointainer/paths/taxibatch/taxi-batch.csv  --resource-group rg-ml-mlopsworkspaces-jb  --workspace-name mlopsdemojb02 --output-path azureml://datastores/mlopsdemotestcointainer/paths/taxioutput
+az ml batch-endpoint invoke --name $endpoint_name_test --deployment-name batch-dp-mlopsdemo-test  --input-type uri_file --input azureml://datastores/mlopsdemotestcointainer/paths/taxibatch/taxi-batch.csv --resource-group $resource_group_ml --workspace-name $workspace02 --output-path azureml://datastores/mlopsdemotestcointainer/paths/taxioutput
 ```
+
+This command will invoke a job, that will use the deployed model in the test workspace, and generate the results from the data in the **taxi-batch.csv** in the **taxioutput** folder in the test container
+
+![image](https://user-images.githubusercontent.com/31459994/192123162-04e811f2-b363-471f-8f90-3d2f993df122.png)
+
+
 
 ## 3) Prod Steps - Workspace 03 (Prod)
 
 ### Create Environment
 
 ```powershell
-az ml environment create --file ./prod/prod-env.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
+az ml environment create --file ./prod/prod-env.yml --workspace-name $workspace03 --resource-group $resource_group_ml
 ```
 
 ### Create datastore and data asset
@@ -288,74 +296,48 @@ az ml environment create --file ./prod/prod-env.yml --workspace-name mlopsdemojb
 Datastore
 
 ```powershell
-az ml datastore create --file ./prod/data-store.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
+az ml datastore create --file ./prod/data-store.yml --workspace-name $workspace03 --resource-group $resource_group_ml --set account_name=$storage_name
 ```
 
 Data Asset
 
 ```powershell
-az ml data create -f ./prod/file-data-asset.yml --workspace-name mlopsdemojb03 --resource-group rg-ml-mlopsworkspaces-jb
+az ml data create -f ./prod/file-data-asset.yml --workspace-name $workspace03 --resource-group $resource_group_ml
 ```
 
 ### Download model from Dev Workspace
 
-Already done in Test step
+Already done in Test step.
 
 ### Register Model
 
 ```powershell
-az ml model create --name taxi-prod-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
+az ml model create --name taxi-prod-model-mlops-demo --version 1 --path ./model/taxi-model-mlops-demo --resource-group $resource_group_ml --workspace-name $workspace03
 ```
 
 ### Register Batch Endpoint
 
 ```powershell
-az ml batch-endpoint create --file ./prod/batch-endpoint-prod.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
+$endpoint_name_prod = "taxifare-b-mldemo-p-$resource_sufix"
+
+az ml batch-endpoint create --file ./prod/batch-endpoint-prod.yml --resource-group $resource_group_ml --workspace-name $workspace03 --set name=$endpoint_name_prod
 ```
 
 ### Register Batch Deployment
 
 ```powershell
-az ml batch-deployment create --file ./prod/batch-deployment-prod.yml --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03
+az ml batch-deployment create --file ./prod/batch-deployment-prod.yml --resource-group $resource_group_ml --workspace-name $workspace03 --set endpoint_name=$endpoint_name_prod
 ```
 
 ### Execute Batch Job
 
 ```powershell
-az ml batch-endpoint invoke --name taxi-fare-batch-mlopsdemo-prod --deployment-name batch-dp-mlopsdemo-prod --input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv --resource-group rg-ml-mlopsworkspaces-jb --workspace-name mlopsdemojb03 --output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
+az ml batch-endpoint invoke --name $endpoint_name_prod --deployment-name batch-dp-mlopsdemo-prod --input-type uri_file --input azureml://datastores/mlopsdemoprodcointainer/paths/taxibatch/taxi-batch.csv --resource-group $resource_group_ml --workspace-name $workspace03 --output-path azureml://datastores/mlopsdemoprodcointainer/paths/taxioutput
 ```
-
-## Demo Outcomes
-
-### Dev Workspace
-
-![image](https://user-images.githubusercontent.com/31459994/189990789-c095bd4a-4a98-42cf-a2c1-85ed2fab1bdb.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189990983-93d28187-3b56-49b6-996e-f7379574b29e.png)
-
-### Test Workspace
-
-![image](https://user-images.githubusercontent.com/31459994/189991064-b49fc8c0-426e-47e3-9b4f-dfcb2bd368b6.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991354-0ba0ba7f-143a-4c74-bdd7-9012af47a063.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991391-595b1af4-b468-40e9-8142-84f7d9459508.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991441-7841d995-7bc5-45e4-86c8-3db743b5e8b2.png)
-
-### Prod Workspace
-
-![image](https://user-images.githubusercontent.com/31459994/189991518-146b149c-6822-4710-9c3d-7818752d9bb7.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991642-ba508cfc-3fa5-4c86-9ca7-8d9a1b9cb150.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991684-ac0a69e2-8c83-4296-b2ad-dbc8ab08bf4d.png)
-
-![image](https://user-images.githubusercontent.com/31459994/189991726-34e220fa-7040-4687-8603-23f58c4523ba.png)
 
 ---------------------------------------------------------------------------------------------------------------
 
-# GitHub Actions
+# GitHub Actions (in development)
 
 ## Dev Actions
 
