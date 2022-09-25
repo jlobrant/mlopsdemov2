@@ -453,6 +453,14 @@ Also, create a resource group secret and a workspace secret with the RG name and
 
 In Dev, use the value of the variable $workspace01, in Test $workspace02 and Prod $workspace03
 
+**IMPORTANT: Also create a WORKSPACE_NAME_DEV secret in Test and Prod, as you will need this to donwload the model from Dev to Register in the proper environment**
+
+![image](https://user-images.githubusercontent.com/31459994/192128261-59e0aded-bf83-4625-bde2-4ce11d2ef71b.png)
+
+Use the value from parameter $workspace01
+
+<br /><br />
+
 For the Test and Prod environment, configure the **Environment protection rules**. Add at least one login in the **Required reviewers**
 
 ![image](https://user-images.githubusercontent.com/31459994/192127532-b3b3d4b0-bd43-4775-8558-462c178d9c10.png)
