@@ -14,12 +14,21 @@ Check the MLOPs Solution Accelerator (v2) repository for more information:
 
 ## Prerequisite - Setting up new MLOPS
 
-### Use Visual Studio Code to clone this repository:
+### Fork this repository
+
+In the top-right corner of the page, click **Fork**
+
+![image](https://user-images.githubusercontent.com/31459994/192172331-5115e65c-1e55-4b69-9f90-83898da9cac0.png)
+
+Select an owner for the forked repository
+
+![image](https://user-images.githubusercontent.com/31459994/192172409-f57c0d6b-2c48-4537-80be-2dbb1f189e80.png)
+
+### Use Visual Studio Code to clone the forked repository:
 
 ![image](https://user-images.githubusercontent.com/31459994/192029368-4faaf3e2-d160-4cbd-830a-c29ed9218624.png)
 
 ![image](https://user-images.githubusercontent.com/31459994/192029880-f2310bd5-cbab-452e-89b0-d6fdf6a281be.png)
-
 
 If you need help setting this up, check the link below:
 
