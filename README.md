@@ -1,6 +1,6 @@
 # MLOps - Step by step guide
 
-![image](https://user-images.githubusercontent.com/31459994/192124518-f043cf1a-1626-4c40-823e-f8683cc80b55.png)
+![image](https://user-images.githubusercontent.com/31459994/192173420-d528a14c-0fb5-47f3-a5a5-0618a652589b.png)
 
 This guide was inspired by the Azure MLOPs (v2) solution accelerator, and the goal is to help you understand all the steps involved in building the foundation of an ML environment with MLOps.
 
