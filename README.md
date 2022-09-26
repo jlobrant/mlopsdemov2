@@ -2,7 +2,7 @@
 
 ![image](https://user-images.githubusercontent.com/31459994/192124518-f043cf1a-1626-4c40-823e-f8683cc80b55.png)
 
-This guide was inspired by the Azure MLOPs (v2) solution accelerator, and the goal is to help you understand all the steps involved in building the foundation of an end2end MLOPs environment.
+This guide was inspired by the Azure MLOPs (v2) solution accelerator, and the goal is to help you understand all the steps involved in building the foundation of an ML environment with MLOps.
 
 Check the MLOPs Solution Accelerator (v2) repository for more information:
 
@@ -44,11 +44,18 @@ Use the root folder for this demo
 
 ![image](https://user-images.githubusercontent.com/31459994/192061574-b38230b4-05e8-4ff8-8a58-17a9424bb353.png)
 
-### Authenticate using az login and set the default subscription
+### Authenticate using az login
 
 ```PowerShell
 az login
 ```
+
+![image](https://user-images.githubusercontent.com/31459994/192172839-a32dacc5-3928-49a2-bbce-f1b728e19bb7.png)
+
+
+![image](https://user-images.githubusercontent.com/31459994/192172780-2a10233a-44b8-4f10-b85c-5d0ff22e4654.png)
+
+
 
 ### Edit the **env.ps1** file in the **scripts** folder
 
