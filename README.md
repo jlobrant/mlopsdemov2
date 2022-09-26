@@ -20,7 +20,7 @@ In the top-right corner of the page, click **Fork**
 
 ![image](https://user-images.githubusercontent.com/31459994/192172615-25910aae-0e32-4816-9aa2-fadeb9dc4e0b.png)
 
-Select an owner for the forked repository
+Select an owner for the forked repository, optionally, add a description of your fork, and click Create fork.
 
 ![image](https://user-images.githubusercontent.com/31459994/192172409-f57c0d6b-2c48-4537-80be-2dbb1f189e80.png)
 
@@ -59,7 +59,7 @@ az login
 
 ### Edit the **env.ps1** file in the **scripts** folder
 
-Update the **$resource_sufix** parameter and **$subscriptionId** before setting the environment variables (executing the env.ps1)
+***IMPORTANT! Update the **$resource_sufix** parameter and **$subscriptionId** before setting the environment variables (executing the env.ps1)***
 
 ![image](https://user-images.githubusercontent.com/31459994/192129117-b06224db-2839-4f4c-8961-18a3ae08e77b.png)
 
@@ -68,6 +68,15 @@ Update the **$resource_sufix** parameter and **$subscriptionId** before setting 
 ```PowerShell
 . .\scripts\env.ps1
 ```
+
+Check at least one of the variables to make sure the environment variables are set
+
+```PowerShell
+Write-Output $resource_sufix
+```
+
+![image](https://user-images.githubusercontent.com/31459994/192173079-bc0b68a3-9df1-4f9b-b364-687e826cb1ef.png)
+
 
 Set the default subscription id
 
@@ -81,7 +90,7 @@ az account set --subscription $subscriptionId
 az group create -l $resource_region -n $resource_group_ml
 ```
 
-### Create the 3 AML Workspaces to use in this demo (Dev, Test and Prod)
+### Create the 3 AML Workspaces that you need for this demo (Dev, Test and Prod)
 
 01 - Create Dev Workspace
 
