@@ -18,7 +18,7 @@ Check the MLOPs Solution Accelerator (v2) repository for more information:
 
 In the top-right corner of the page, click **Fork**
 
-![image](https://user-images.githubusercontent.com/31459994/192172331-5115e65c-1e55-4b69-9f90-83898da9cac0.png)
+![image](https://user-images.githubusercontent.com/31459994/192172615-25910aae-0e32-4816-9aa2-fadeb9dc4e0b.png)
 
 Select an owner for the forked repository
 
