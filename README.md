@@ -619,7 +619,7 @@ WE DID IT!!!
 
 <br /><br />
 
-***If you've followed all the steps correctly up to this point, you now have your MLOps working and now it's time to improve based on your needs***
+***If you've followed all the steps correctly up to this point, you now have your MLOps working and now it's time to improve your repository based on your needs***
 
 ---------------------------------------------------------------------------------------------------------------
 
