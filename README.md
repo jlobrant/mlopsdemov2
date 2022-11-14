@@ -625,6 +625,20 @@ WE DID IT!!!
 
 # Coming Soon
 
+## Azure ML Registries (Preview)
+
+Azure Machine Learning entities can be grouped into two broad categories:
+
+Assets such as models, environments, components, and datasets are durable entities that are workspace agnostic. For example, a model can be registered with any workspace and deployed to any endpoint.
+Resources such as compute, job, and endpoints are transient entities that are workspace specific. For example, an online endpoint has a scoring URI that is unique to a specific instance in a specific workspace. Similarly, a job runs for a known duration and generates logs and metrics each time it's run.
+Assets lend themselves to being stored in a central repository and used in different workspaces, possibly in different regions. Resources are workspace specific.
+
+AzureML registries (preview) enable you to create and use those assets in different workspaces. Registries support multi-region replication for low latency access to assets, so you can use assets in workspaces located in different Azure regions. Creating a registry will provision Azure resources required to facilitate replication. First, Azure blob storage accounts in each supported region. Second, a single Azure Container Registry with replication enabled to each supported region.
+
+[Manage Azure Machine Learning registries (preview)](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-manage-registries?tabs=cli)
+
+![image](https://user-images.githubusercontent.com/31459994/201561724-d8f8171d-271d-4531-8802-d01875b953a3.png)
+
 ## Feathr Feature Store
 
 ![image](https://user-images.githubusercontent.com/31459994/191637601-c0ebff42-0504-422d-960d-db39b2b3a17f.png)
